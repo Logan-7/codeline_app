@@ -73,6 +73,7 @@ class AddFeesController extends GetxController {
 
   Future<List<Document>> getStudent() async {
     List<Document> studentData = await studentCollection.get();
+    studentList.clear();
     for (int i = 0; i < studentData.length; i++) {
       studentList.add(studentData[i]['name']);
       installmentList.add(

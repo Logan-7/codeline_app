@@ -1,4 +1,5 @@
 import 'package:codeline_app/controller/student_controller.dart';
+import 'package:codeline_app/view/dashboard/dash_board_screen.dart';
 import 'package:codeline_app/widget/app_color.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +76,14 @@ class _StudentListScreenState extends State<StudentListScreen> {
                 Divider(
                   color: AppColor.grey400,
                 ),
+                Row(
+                  children: [
+                    heading(name: 'Roll No'),
+                    heading(name: 'Name'),
+                    heading(name: 'Instalment No'),
+                    Container(width: 50, height: 50, color: AppColor.grey100)
+                  ],
+                ),
                 Expanded(
                   child: FutureBuilder(
                     future: controller.getStudentList(),
@@ -90,7 +99,18 @@ class _StudentListScreenState extends State<StudentListScreen> {
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold),
                               )
-                            : ListView.builder(
+                            : ListView.separated(
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return studentListData[index]['name']
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(
+                                            controller.searchData.toLowerCase(),
+                                          )
+                                      ? Divider()
+                                      : SizedBox();
+                                },
                                 itemBuilder: (context, index) {
                                   return studentListData[index]['name']
                                           .toString()
@@ -98,41 +118,59 @@ class _StudentListScreenState extends State<StudentListScreen> {
                                           .contains(
                                             controller.searchData.toLowerCase(),
                                           )
-                                      ? Container(
-                                          padding: EdgeInsets.all(10),
-                                          margin: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              color: AppColor.whiteColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              buildRow(
-                                                  heading: 'Name',
-                                                  answer:
-                                                      ':   ${studentListData[index]['name']}'),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              buildRow(
-                                                  heading: 'RollNo',
-                                                  answer:
-                                                      ':   ${studentListData[index]['rollNo']}'),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              buildRow(
-                                                  heading: 'Instalment No',
-                                                  answer:
-                                                      ':   ${studentListData[index]['instalment']}'),
-                                            ],
-                                          ),
+                                      ? Row(
+                                          children: [
+                                            value(
+                                                name:
+                                                    '${studentListData[index]['rollNo']}'),
+                                            value(
+                                                name:
+                                                    '${studentListData[index]['name']}'),
+                                            value(
+                                              name:
+                                                  ' ${studentListData[index]['instalment']}',
+                                            ),
+                                            Container(
+                                                width: 50,
+                                                color: AppColor.grey100)
+                                          ],
                                         )
+
+                                      // Container(
+                                      //         padding: EdgeInsets.all(10),
+                                      //         margin: EdgeInsets.all(10),
+                                      //         decoration: BoxDecoration(
+                                      //             color: AppColor.whiteColor,
+                                      //             borderRadius:
+                                      //                 BorderRadius.circular(10)),
+                                      //         child: Column(
+                                      //           crossAxisAlignment:
+                                      //               CrossAxisAlignment.start,
+                                      //           children: [
+                                      //             buildRow(
+                                      //                 heading: 'Name',
+                                      //                 answer:
+                                      //                     ':   ${studentListData[index]['name']}'),
+                                      //             SizedBox(
+                                      //               height: 5,
+                                      //             ),
+                                      //             buildRow(
+                                      //                 heading: 'RollNo',
+                                      //                 answer:
+                                      //                     ':   ${studentListData[index]['rollNo']}'),
+                                      //             SizedBox(
+                                      //               height: 5,
+                                      //             ),
+                                      //             buildRow(
+                                      //                 heading: 'Instalment No',
+                                      //                 answer:
+                                      //                     ':   ${studentListData[index]['instalment']}'),
+                                      //           ],
+                                      //         ),
+                                      //       )
                                       : SizedBox();
                                 },
-                                itemCount: snapshot.data?.length,
+                                itemCount: snapshot.data!.length,
                               );
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {

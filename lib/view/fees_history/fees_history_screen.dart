@@ -1,4 +1,5 @@
 import 'package:codeline_app/controller/fees_history_controller.dart';
+import 'package:codeline_app/view/dashboard/dash_board_screen.dart';
 import 'package:codeline_app/widget/app_color.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +79,14 @@ class _FeesHistoryScreenState extends State<FeesHistoryScreen> {
                 Divider(
                   color: AppColor.grey400,
                 ),
+                Row(
+                  children: [
+                    heading(name: 'No'),
+                    heading(name: 'Instalment No'),
+                    heading(name: 'Instalment No'),
+                    Container(width: 50, height: 50, color: AppColor.grey100)
+                  ],
+                ),
                 Expanded(
                   child: FutureBuilder(
                     future: controller.getFeesHistory(),
@@ -93,7 +102,18 @@ class _FeesHistoryScreenState extends State<FeesHistoryScreen> {
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold),
                               )
-                            : ListView.builder(
+                            : ListView.separated(
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return feesData[index]['name']
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(
+                                            controller.searchData.toLowerCase(),
+                                          )
+                                      ? Divider()
+                                      : SizedBox();
+                                },
                                 itemBuilder: (context, index) {
                                   return feesData[index]['name']
                                           .toString()
@@ -101,52 +121,69 @@ class _FeesHistoryScreenState extends State<FeesHistoryScreen> {
                                           .contains(
                                             controller.searchData.toLowerCase(),
                                           )
-                                      ? Container(
-                                          padding: EdgeInsets.all(10),
-                                          margin: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              color: AppColor.whiteColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              buildRow(
-                                                heading: 'Name',
-                                                answer:
-                                                    ':   ${feesData[index]['name']}',
-                                              ),
-                                              // SizedBox(
-                                              //   height: 5,
-                                              // ),
-                                              // buildRow(
-                                              //   heading: 'Date',
-                                              //   answer:
-                                              //       ':   ${feesData[index]['date']}',
-                                              // ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              buildRow(
-                                                heading: 'No',
-                                                answer:
-                                                    ':   ${feesData[index]['no']}',
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              buildRow(
-                                                heading: 'Instalment No',
-                                                answer:
-                                                    ':   ${feesData[index]['instalment']}',
-                                              ),
-                                            ],
-                                          ),
+                                      ? Row(
+                                          children: [
+                                            value(
+                                                name:
+                                                    '${feesData[index]['no']}'),
+                                            value(
+                                                name:
+                                                    '${feesData[index]['name']}'),
+                                            value(
+                                              name:
+                                                  ' ${feesData[index]['instalment']}',
+                                            ),
+                                            Container(
+                                                width: 50,
+                                                color: AppColor.grey100)
+                                          ],
                                         )
+                                      // Container(
+                                      //         padding: EdgeInsets.all(10),
+                                      //         margin: EdgeInsets.all(10),
+                                      //         decoration: BoxDecoration(
+                                      //             color: AppColor.whiteColor,
+                                      //             borderRadius:
+                                      //                 BorderRadius.circular(10)),
+                                      //         child: Column(
+                                      //           crossAxisAlignment:
+                                      //               CrossAxisAlignment.start,
+                                      //           children: [
+                                      //             buildRow(
+                                      //               heading: 'Name',
+                                      //               answer:
+                                      //                   ':   ${feesData[index]['name']}',
+                                      //             ),
+                                      //             // SizedBox(
+                                      //             //   height: 5,
+                                      //             // ),
+                                      //             // buildRow(
+                                      //             //   heading: 'Date',
+                                      //             //   answer:
+                                      //             //       ':   ${feesData[index]['date']}',
+                                      //             // ),
+                                      //             SizedBox(
+                                      //               height: 5,
+                                      //             ),
+                                      //             buildRow(
+                                      //               heading: 'No',
+                                      //               answer:
+                                      //                   ':   ${feesData[index]['no']}',
+                                      //             ),
+                                      //             SizedBox(
+                                      //               height: 5,
+                                      //             ),
+                                      //             buildRow(
+                                      //               heading: 'Instalment No',
+                                      //               answer:
+                                      //                   ':   ${feesData[index]['instalment']}',
+                                      //             ),
+                                      //           ],
+                                      //         ),
+                                      //       )
                                       : SizedBox();
                                 },
-                                itemCount: snapshot.data?.length,
+                                itemCount: snapshot.data!.length,
                               );
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {

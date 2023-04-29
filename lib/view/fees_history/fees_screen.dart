@@ -127,6 +127,7 @@ class _FeesScreenState extends State<FeesScreen> {
                                                 .clear();
                                             controller.amountNumberController
                                                 .clear();
+                                            controller.nameController.clear();
                                             controller.amountController.clear();
                                             setState(() {});
                                           } else {}

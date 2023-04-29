@@ -26,6 +26,7 @@ class AddInquiryController extends GetxController {
       await Firestore.instance.collection('InquiryList').add({
         'status': selectStatusType,
         'date': DateTime.now(),
+        'followUpdate': DateTime.now(),
         'interest': interestController.text,
         'mobile': mobileController.text,
         'name': nameController.text,

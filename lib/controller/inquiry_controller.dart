@@ -58,12 +58,14 @@ class InquiryController extends GetxController {
   }
 
   /// UPDATE COLLECTION IN FIREBASE STORAGE
-  updateParticularInquiry(String status, BuildContext context) async {
+  updateParticularInquiry(
+      String status, DateTime followTime, BuildContext context) async {
     try {
       await particularInquiryCollection.document(studentId).update({
         'status': status,
         'mobile': mobileController.text,
         'name': nameController.text,
+        'followUpdate': followTime,
         'note': noteController.text,
       }).whenComplete(() {
         CommonSnackBar.getSuccessSnackBar(
@@ -88,6 +90,22 @@ class InquiryController extends GetxController {
 }
 
 class DropDownController extends GetxController {
+  DateTime? followUpTime;
+
+  updateFollowUpTime(BuildContext context) async {
+    /// PICK DOB DATE
+
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime(3000));
+    if (picked != null) {
+      followUpTime = picked;
+    }
+    update();
+  }
+
   RxString selectStatusType = ''.obs;
   updateSelectStatusType(String value) {
     selectStatusType.value = value;

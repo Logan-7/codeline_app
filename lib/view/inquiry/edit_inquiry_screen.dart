@@ -72,6 +72,8 @@ class _UpdateInquiryScreenState extends State<UpdateInquiryScreen> {
                       controller.noteController.text = inquiryData['note'];
                       dropDownController.selectStatusType.value =
                           inquiryData['status'];
+                      dropDownController.followUpTime =
+                          inquiryData['followUpdate'];
                       return Center(
                         child: Container(
                           constraints: BoxConstraints(maxWidth: 900),
@@ -83,39 +85,119 @@ class _UpdateInquiryScreenState extends State<UpdateInquiryScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      height: 50,
-                                      width: 250,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                          color: AppColor.grey400,
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'No : ${inquiryData!['no']}',
+                                    Column(
+                                      children: [
+                                        Text(
+                                          '',
                                           style: TextStyle(
                                               letterSpacing: 3, fontSize: 16),
                                         ),
-                                      ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          height: 50,
+                                          width: 250,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: AppColor.grey400,
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              'No : ${inquiryData!['no']}',
+                                              style: TextStyle(
+                                                  letterSpacing: 3,
+                                                  fontSize: 16),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Container(
-                                      height: 50,
-                                      width: 250,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                          color: AppColor.grey400,
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          '${DateFormat('dd/MM/yyyy').format(DateTime.now())}',
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Follow Up Date',
                                           style: TextStyle(
                                               letterSpacing: 3, fontSize: 16),
                                         ),
-                                      ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        GetBuilder<DropDownController>(
+                                          builder: (controller) {
+                                            return InkWell(
+                                              onTap: () {
+                                                dropDownController
+                                                    .updateFollowUpTime(
+                                                        context);
+                                              },
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Container(
+                                                height: 50,
+                                                width: 250,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: AppColor.grey400,
+                                                  ),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    dropDownController
+                                                                .followUpTime ==
+                                                            null
+                                                        ? 'Select Follow Date'
+                                                        : '${DateFormat('dd/MM/yyyy').format(dropDownController.followUpTime!)}',
+                                                    style: TextStyle(
+                                                        letterSpacing: 3,
+                                                        fontSize: 16),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Inquiry Date',
+                                          style: TextStyle(
+                                              letterSpacing: 3, fontSize: 16),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          height: 50,
+                                          width: 250,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: AppColor.grey400,
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              '${DateFormat('dd/MM/yyyy').format(DateTime.now())}',
+                                              style: TextStyle(
+                                                  letterSpacing: 3,
+                                                  fontSize: 16),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     )
                                   ],
                                 ),
@@ -245,6 +327,7 @@ class _UpdateInquiryScreenState extends State<UpdateInquiryScreen> {
                                           controller.updateParticularInquiry(
                                               dropDownController
                                                   .selectStatusType.value,
+                                              dropDownController.followUpTime!,
                                               context);
                                         },
                                         child: Text('Update'),
