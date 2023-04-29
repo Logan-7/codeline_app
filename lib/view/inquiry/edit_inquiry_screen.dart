@@ -273,8 +273,12 @@ class _UpdateInquiryScreenState extends State<UpdateInquiryScreen> {
                                             dropDownController
                                                 .updateSelectStatusType(val!);
                                           },
-                                          items: ['Follow Up', 'Not Interested']
-                                              .map((String items) {
+                                          items: [
+                                            'Follow Up',
+                                            'Not Interested',
+                                            'Demo Started',
+                                            'Joined'
+                                          ].map((String items) {
                                             return DropdownMenuItem(
                                               value: items,
                                               child: Text(

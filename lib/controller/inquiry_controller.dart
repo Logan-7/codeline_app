@@ -18,6 +18,12 @@ class InquiryController extends GetxController {
 
   bool openInquiry = false;
   String studentId = '';
+  int selectedDashboardIndex = 1;
+
+  updateDashboardIndex(int value) {
+    selectedDashboardIndex = value;
+    update();
+  }
 
   updateStudentId(String value) {
     studentId = value;
@@ -98,7 +104,7 @@ class DropDownController extends GetxController {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(1900),
+        firstDate: DateTime.now(),
         lastDate: DateTime(3000));
     if (picked != null) {
       followUpTime = picked;

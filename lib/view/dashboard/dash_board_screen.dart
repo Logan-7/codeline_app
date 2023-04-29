@@ -1,6 +1,9 @@
 import 'package:codeline_app/controller/inquiry_controller.dart';
+import 'package:codeline_app/view/dashboard/widget/hesder_value.dart';
+import 'package:codeline_app/view/dashboard/widget/student_data.dart';
 import 'package:codeline_app/view/inquiry/edit_inquiry_screen.dart';
 import 'package:codeline_app/widget/app_color.dart';
+import 'package:codeline_app/widget/images_path.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +17,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   InquiryController inquiryController = Get.put(InquiryController());
+  List data = [];
 
   @override
   void initState() {
@@ -32,115 +36,318 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Wrap(
-                          spacing: 50,
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'Welcome Admin',
+                          style: TextStyle(
+                              color: AppColor.mainColor,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Divider(
+                          color: AppColor.grey400,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Container(
-                              height: 200,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                  color: AppColor.mainColor.withAlpha(100),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Total Student',
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  FutureBuilder(
-                                    future: controller.getStudentList(),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<List<Document>>
-                                            snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.done) {
-                                        var studentListData = snapshot.data;
-                                        return Text(
-                                          '${studentListData?.length}',
-                                          style: TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold),
-                                        );
-                                      } else if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            color: AppColor.mainColor,
-                                          ),
-                                        );
-                                      } else {
-                                        return Text(
-                                          'Try Again',
-                                          style: TextStyle(
-                                              color: AppColor.mainColor,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
+                            /// STUDENT
+                            Column(
+                              children: [
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(10000),
+                                  onTap: () {
+                                    controller.updateDashboardIndex(0);
+                                  },
+                                  child: buildDashboardImage(
+                                      image: AppImages.student, index: 0),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FutureBuilder(
+                                      future: controller.getStudentList(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<List<Document>>
+                                              snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.done) {
+                                          var studentListData = snapshot.data;
+                                          return Text(
+                                            '${studentListData?.length}',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Text(
+                                            '',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        } else {
+                                          return Text(
+                                            'Try Again',
+                                            style: TextStyle(
+                                                color: AppColor.mainColor,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    Text(
+                                      'Total Student',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: AppColor.grey400),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            Container(
-                              height: 200,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                  color: AppColor.mainColor.withAlpha(100),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Total Inquiry',
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  FutureBuilder(
-                                    future: controller.getInquiryList(),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<List<Document>>
-                                            snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.done) {
-                                        var studentListData = snapshot.data;
-                                        return Text(
-                                          '${studentListData?.length}',
-                                          style: TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold),
-                                        );
-                                      } else if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            color: AppColor.mainColor,
-                                          ),
-                                        );
-                                      } else {
-                                        return Text(
-                                          'Try Again',
-                                          style: TextStyle(
-                                              color: AppColor.mainColor,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
+
+                            /// INQUIRY
+
+                            Column(
+                              children: [
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(10000),
+                                  onTap: () {
+                                    controller.updateDashboardIndex(1);
+                                  },
+                                  child: buildDashboardImage(
+                                      image: AppImages.work, index: 1),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FutureBuilder(
+                                      future: controller.getInquiryList(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<List<Document>>
+                                              snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.done) {
+                                          var studentListData = snapshot.data;
+                                          return Text(
+                                            '${studentListData?.length}',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Text(
+                                            '',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        } else {
+                                          return Text(
+                                            'Try Again',
+                                            style: TextStyle(
+                                                color: AppColor.mainColor,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    Text(
+                                      'Total Inquiry',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: AppColor.grey400),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+
+                            /// CURRENT DEMO
+
+                            Column(
+                              children: [
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(10000),
+                                  onTap: () {
+                                    controller.updateDashboardIndex(2);
+                                  },
+                                  child: buildDashboardImage(
+                                      image: AppImages.chart, index: 2),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FutureBuilder(
+                                      future: controller.getInquiryList(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<List<Document>>
+                                              snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.done) {
+                                          var studentListData = snapshot.data;
+                                          List data = [];
+
+                                          try {
+                                            for (int i = 0;
+                                                i < studentListData!.length;
+                                                i++) {
+                                              if (studentListData[i]
+                                                      ['status'] ==
+                                                  'Demo Started') {
+                                                data.add(i);
+                                              }
+                                            }
+                                          } catch (e) {
+                                            print('-----ERROR----$e');
+                                          }
+
+                                          return Text(
+                                            '${data.length}',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Text(
+                                            '',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        } else {
+                                          return Text(
+                                            'Try Again',
+                                            style: TextStyle(
+                                                color: AppColor.mainColor,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    Text(
+                                      'Current Demo',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: AppColor.grey400),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+
+                            /// COMPLETE STUDENT
+
+                            Column(
+                              children: [
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(10000),
+                                  onTap: () {
+                                    controller.updateDashboardIndex(3);
+                                  },
+                                  child: buildDashboardImage(
+                                      image: AppImages.badge, index: 3),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FutureBuilder(
+                                      future: controller.getInquiryList(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<List<Document>>
+                                              snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.done) {
+                                          var studentListData = snapshot.data;
+                                          List data = [];
+
+                                          try {
+                                            for (int i = 0;
+                                                i < studentListData!.length;
+                                                i++) {
+                                              if (studentListData[i]
+                                                      ['status'] ==
+                                                  'Joined') {
+                                                data.add(i);
+                                              }
+                                            }
+                                          } catch (e) {
+                                            print('-----ERROR----$e');
+                                          }
+                                          return Text(
+                                            '${data.length}',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Text(
+                                            '',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        } else {
+                                          return Text(
+                                            'Try Again',
+                                            style: TextStyle(
+                                                color: AppColor.mainColor,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.bold),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    Text(
+                                      'Complete Student',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: AppColor.grey400),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -160,123 +367,60 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         SizedBox(
                           height: 50,
                         ),
-                        Row(
-                          children: [
-                            heading(name: 'Name'),
-                            heading(name: 'Mobile No'),
-                            heading(name: 'Status'),
-                            heading(name: 'Note'),
-                            Container(
-                              height: 50,
-                              width: 200,
-                              color: AppColor.grey100,
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Follow Up',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
+                        controller.selectedDashboardIndex == 1
+                            ? Row(
+                                children: [
+                                  Text(
+                                    'No',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  heading(name: 'Name'),
+                                  heading(name: 'Mobile No'),
+                                  heading(name: 'Status'),
+                                  heading(name: 'Note'),
+                                  Container(
+                                    height: 50,
+                                    width: 200,
+                                    color: AppColor.grey100,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Follow Up',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                      width: 50,
+                                      height: 50,
+                                      color: AppColor.grey100)
+                                ],
+                              )
+                            : Row(
+                                children: [
+                                  Text(
+                                    'No',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  heading(name: 'Name'),
+                                  heading(name: 'Email'),
+                                  heading(name: 'DOB'),
+                                  heading(name: 'Mobile No'),
+                                ],
                               ),
-                            ),
-                            Container(
-                                width: 50, height: 50, color: AppColor.grey100)
-                          ],
-                        ),
                         SizedBox(
                           height: 20,
                         ),
-                        Expanded(
-                          child: FutureBuilder(
-                            future: controller.getInquiryList(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Document>> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                DateTime todayDate = DateTime.now();
-                                DateTime threeDayAgoTime =
-                                    todayDate.subtract(Duration(days: 3));
-                                var inquiryListData = snapshot.data;
-                                return ListView.separated(
-                                  itemBuilder: (context, index) {
-                                    return threeDayAgoTime.isBefore(
-                                            inquiryListData![index]
-                                                ['followUpdate'])
-                                        ? Row(
-                                            children: [
-                                              value(
-                                                  name:
-                                                      '${inquiryListData[index]['name']}'),
-                                              value(
-                                                  name:
-                                                      ' ${inquiryListData[index]['mobile']}'),
-                                              value(
-                                                name:
-                                                    ' ${inquiryListData[index]['status']}',
-                                                color: inquiryListData[index]
-                                                                ['status']
-                                                            .toString()
-                                                            .toLowerCase() ==
-                                                        'Follow Up'
-                                                            .toLowerCase()
-                                                    ? AppColor.blueColor
-                                                    : AppColor.redColor,
-                                              ),
-                                              value(
-                                                  name:
-                                                      '${inquiryListData[index]['note']}'),
-                                              Container(
-                                                height: 50,
-                                                width: 200,
-                                                alignment: Alignment.center,
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    controller.updateStudentId(
-                                                        inquiryListData[index]
-                                                            .id);
-
-                                                    controller
-                                                        .updateOpenInquiry(
-                                                            true);
-                                                  },
-                                                  child: Text('Follow Up'),
-                                                ),
-                                              ),
-                                              Container(
-                                                  width: 50,
-                                                  color: AppColor.grey100)
-                                            ],
-                                          )
-                                        : SizedBox();
-                                  },
-                                  itemCount: snapshot.data!.length,
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
-                                    return threeDayAgoTime.isBefore(
-                                            inquiryListData![index]['date'])
-                                        ? Divider()
-                                        : SizedBox();
-                                  },
-                                );
-                              } else if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    color: AppColor.mainColor,
-                                  ),
-                                );
-                              } else {
-                                return Text(
-                                  'Try Again',
-                                  style: TextStyle(
-                                      color: AppColor.mainColor,
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
-                                );
-                              }
-                            },
-                          ),
-                        ),
+                        controller.selectedDashboardIndex == 1
+                            ? InquiryData(controller: controller, data: data)
+                            : StudentData(controller: controller),
                       ],
                     ),
                   ),
@@ -285,95 +429,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
       },
     );
   }
-}
 
-Expanded heading({String? name}) {
-  return Expanded(
-    child: Container(
-      height: 50,
-      color: AppColor.grey100,
-      alignment: Alignment.center,
-      child: Text(
-        '$name',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
+  Container buildDashboardImage({String? image, int? index}) {
+    return Container(
+      height: 150,
+      width: 150,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: AppColor.mainColor, width: 7),
+      ),
+      child: Center(
+        child: Image.asset(
+          image!,
+          height: index == 0 ? 90 : 70,
+          width: index == 0 ? 90 : 70,
         ),
       ),
-    ),
-  );
+    );
+  }
 }
-
-Expanded value({String? name, Color color = Colors.black}) {
-  return Expanded(
-    child: Container(
-      height: 50,
-      alignment: Alignment.center,
-      child: Text(
-        '$name',
-        style: TextStyle(fontSize: 15, color: color),
-      ),
-    ),
-  );
-}
-// controller.updateStudentId(
-// inquiryListData[index].id);
-//
-// controller
-//     .updateOpenInquiry(true);
-// Container(
-// padding: EdgeInsets.all(10),
-// margin: EdgeInsets.all(10),
-// decoration: BoxDecoration(
-// color: AppColor.whiteColor,
-// borderRadius:
-// BorderRadius.circular(10)),
-// child: Column(
-// crossAxisAlignment:
-// CrossAxisAlignment.start,
-// children: [
-// buildRow(
-// heading: 'No',
-// answer:
-// ':   ${inquiryListData![index]['no']}'),
-// SizedBox(
-// height: 5,
-// ),
-// buildRow(
-// heading: 'Name',
-// answer:
-// ':   ${inquiryListData[index]['name']}'),
-// SizedBox(
-// height: 5,
-// ),
-// buildRow(
-// heading: 'Number',
-// answer:
-// ':   ${inquiryListData[index]['mobile']}'),
-// SizedBox(
-// height: 5,
-// ),
-// buildRow(
-// heading: 'Status',
-// answer:
-// ':   ${inquiryListData[index]['status']}',
-// answerColor: inquiryListData[
-// index]
-// ['status']
-// .toString()
-//     .toLowerCase() ==
-// 'Follow Up'
-// .toLowerCase()
-// ? AppColor.blueColor
-//     : AppColor.redColor,
-// ),
-// SizedBox(
-// height: 5,
-// ),
-// buildRow(
-// heading: 'Note',
-// answer:
-// ':   ${inquiryListData[index]['note']}'),
-// ],
-// ),
-// ),

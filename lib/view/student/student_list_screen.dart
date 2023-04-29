@@ -1,5 +1,5 @@
 import 'package:codeline_app/controller/student_controller.dart';
-import 'package:codeline_app/view/dashboard/dash_board_screen.dart';
+import 'package:codeline_app/view/dashboard/widget/hesder_value.dart';
 import 'package:codeline_app/widget/app_color.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +14,7 @@ class StudentListScreen extends StatefulWidget {
 
 class _StudentListScreenState extends State<StudentListScreen> {
   StudentController studentController = Get.put(StudentController());
+
   Widget build(BuildContext context) {
     return GetBuilder<StudentController>(
       builder: (controller) {
@@ -78,6 +79,13 @@ class _StudentListScreenState extends State<StudentListScreen> {
                 ),
                 Row(
                   children: [
+                    Text(
+                      'No',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
                     heading(name: 'Roll No'),
                     heading(name: 'Name'),
                     heading(name: 'Instalment No'),
@@ -120,6 +128,13 @@ class _StudentListScreenState extends State<StudentListScreen> {
                                           )
                                       ? Row(
                                           children: [
+                                            Text(
+                                              '${index + 1}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
                                             value(
                                                 name:
                                                     '${studentListData[index]['rollNo']}'),

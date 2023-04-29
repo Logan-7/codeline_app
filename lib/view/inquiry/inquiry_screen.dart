@@ -1,5 +1,5 @@
 import 'package:codeline_app/controller/inquiry_controller.dart';
-import 'package:codeline_app/view/dashboard/dash_board_screen.dart';
+import 'package:codeline_app/view/dashboard/widget/hesder_value.dart';
 import 'package:codeline_app/view/inquiry/edit_inquiry_screen.dart';
 import 'package:codeline_app/widget/app_color.dart';
 import 'package:firedart/firedart.dart';
@@ -80,6 +80,13 @@ class _InquiryScreenState extends State<InquiryScreen> {
                       ),
                       Row(
                         children: [
+                          Text(
+                            'No',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
                           heading(name: 'Name'),
                           heading(name: 'Mobile No'),
                           heading(name: 'Status'),
@@ -131,6 +138,10 @@ class _InquiryScreenState extends State<InquiryScreen> {
                                             : SizedBox();
                                       },
                                       itemBuilder: (context, index) {
+                                        var status = inquiryListData[index]
+                                                ['status']
+                                            .toString()
+                                            .toLowerCase();
                                         return inquiryListData[index]['name']
                                                 .toString()
                                                 .toLowerCase()
@@ -140,6 +151,14 @@ class _InquiryScreenState extends State<InquiryScreen> {
                                                 )
                                             ? Row(
                                                 children: [
+                                                  Text(
+                                                    '${index + 1}',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
                                                   value(
                                                       name:
                                                           '${inquiryListData[index]['name']}'),
@@ -149,15 +168,22 @@ class _InquiryScreenState extends State<InquiryScreen> {
                                                   value(
                                                     name:
                                                         ' ${inquiryListData[index]['status']}',
-                                                    color: inquiryListData[
-                                                                        index]
-                                                                    ['status']
-                                                                .toString()
-                                                                .toLowerCase() ==
+                                                    color: status ==
                                                             'Follow Up'
                                                                 .toLowerCase()
                                                         ? AppColor.blueColor
-                                                        : AppColor.redColor,
+                                                        : status ==
+                                                                'Demo Started'
+                                                                    .toLowerCase()
+                                                            ? AppColor
+                                                                .yellowColor
+                                                            : status ==
+                                                                    'Joined'
+                                                                        .toLowerCase()
+                                                                ? AppColor
+                                                                    .greenColor
+                                                                : AppColor
+                                                                    .redColor,
                                                   ),
                                                   value(
                                                       name:
@@ -167,6 +193,11 @@ class _InquiryScreenState extends State<InquiryScreen> {
                                                     width: 200,
                                                     alignment: Alignment.center,
                                                     child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              backgroundColor:
+                                                                  AppColor
+                                                                      .mainColor),
                                                       onPressed: () {
                                                         controller
                                                             .updateStudentId(

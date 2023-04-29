@@ -1,5 +1,5 @@
 import 'package:codeline_app/controller/fees_history_controller.dart';
-import 'package:codeline_app/view/dashboard/dash_board_screen.dart';
+import 'package:codeline_app/view/dashboard/widget/hesder_value.dart';
 import 'package:codeline_app/widget/app_color.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
@@ -81,8 +81,15 @@ class _FeesHistoryScreenState extends State<FeesHistoryScreen> {
                 ),
                 Row(
                   children: [
-                    heading(name: 'No'),
-                    heading(name: 'Instalment No'),
+                    Text(
+                      'No',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    heading(name: 'Roll No'),
+                    heading(name: 'Name'),
                     heading(name: 'Instalment No'),
                     Container(width: 50, height: 50, color: AppColor.grey100)
                   ],
@@ -123,6 +130,13 @@ class _FeesHistoryScreenState extends State<FeesHistoryScreen> {
                                           )
                                       ? Row(
                                           children: [
+                                            Text(
+                                              '${index + 1}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
                                             value(
                                                 name:
                                                     '${feesData[index]['no']}'),
