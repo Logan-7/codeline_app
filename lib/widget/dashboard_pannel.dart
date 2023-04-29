@@ -1,4 +1,5 @@
 import 'package:codeline_app/controller/dashboard_controller.dart';
+import 'package:codeline_app/controller/inquiry_controller.dart';
 import 'package:codeline_app/widget/app_color.dart';
 import 'package:codeline_app/widget/dashboard_view.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,10 @@ import 'tiles.dart';
 
 class DashBoardPanel extends StatelessWidget {
   final drawerKey;
+  final InquiryController inquiryController;
 
-  const DashBoardPanel({super.key, required this.drawerKey});
+  const DashBoardPanel(
+      {super.key, required this.drawerKey, required this.inquiryController});
 
   /// update __icon__ and __text__ color when button is pressed in
   /// dashboard panel
@@ -92,6 +95,8 @@ class DashBoardPanel extends StatelessWidget {
                           onTap: () {
                             controller.currentScreen.value =
                                 DashBoardPanelScreens.dashboard;
+                            inquiryController.updateOpenInquiry(false);
+
                             drawerKey.currentState!.closeDrawer();
                           },
                         ),
@@ -214,6 +219,7 @@ class DashBoardPanel extends StatelessWidget {
                           onTap: () {
                             controller.currentScreen.value =
                                 DashBoardPanelScreens.inquiryList;
+                            inquiryController.updateOpenInquiry(false);
                             drawerKey.currentState!.closeDrawer();
                           },
                         ),
@@ -348,126 +354,126 @@ class DashBoardPanel extends StatelessWidget {
                 ),
 
                 /// 7
-                MouseRegion(
-                  onEnter: (e) {
-                    controller.updateHover7(true);
-                  },
-                  onExit: (e) {
-                    controller.updateHover7(false);
-                  },
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 10,
-                        height: 45,
-                        margin: EdgeInsets.only(right: 20, bottom: 5),
-                        decoration: BoxDecoration(
-                          color: controller.currentScreen.value ==
-                                  DashBoardPanelScreens.addDevloper
-                              ? AppColor.mainColor
-                              : controller.hover7.value == true
-                                  ? AppColor.mainColor.withAlpha(100)
-                                  : Colors.transparent,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 180,
-                        height: 45,
-                        margin: EdgeInsets.only(right: 20, bottom: 5),
-                        decoration: BoxDecoration(
-                          color: controller.currentScreen.value ==
-                                  DashBoardPanelScreens.addDevloper
-                              ? AppColor.mainColor
-                              : controller.hover7.value == true
-                                  ? AppColor.mainColor.withAlpha(100)
-                                  : Colors.transparent,
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: CustomTile(
-                          textColor: _updateColor(
-                              controller.currentScreen,
-                              DashBoardPanelScreens.addDevloper,
-                              controller.hover7.value,
-                              context: context),
-                          titleMessage: "Add Devloper",
-                          onTap: () {
-                            controller.currentScreen.value =
-                                DashBoardPanelScreens.addDevloper;
-                            drawerKey.currentState!.closeDrawer();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                /// 8
-                MouseRegion(
-                  onEnter: (e) {
-                    controller.updateHover8(true);
-                  },
-                  onExit: (e) {
-                    controller.updateHover8(false);
-                  },
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 10,
-                        height: 45,
-                        margin: EdgeInsets.only(right: 20, bottom: 5),
-                        decoration: BoxDecoration(
-                          color: controller.currentScreen.value ==
-                                  DashBoardPanelScreens.devloper
-                              ? AppColor.mainColor
-                              : controller.hover8.value == true
-                                  ? AppColor.mainColor.withAlpha(100)
-                                  : Colors.transparent,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 180,
-                        height: 45,
-                        margin: EdgeInsets.only(right: 20, bottom: 5),
-                        decoration: BoxDecoration(
-                          color: controller.currentScreen.value ==
-                                  DashBoardPanelScreens.devloper
-                              ? AppColor.mainColor
-                              : controller.hover8.value == true
-                                  ? AppColor.mainColor.withAlpha(100)
-                                  : Colors.transparent,
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: CustomTile(
-                          textColor: _updateColor(
-                              controller.currentScreen,
-                              DashBoardPanelScreens.devloper,
-                              controller.hover8.value,
-                              context: context),
-                          titleMessage: "Devloper",
-                          onTap: () {
-                            controller.currentScreen.value =
-                                DashBoardPanelScreens.devloper;
-                            drawerKey.currentState!.closeDrawer();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+                // MouseRegion(
+                //   onEnter: (e) {
+                //     controller.updateHover7(true);
+                //   },
+                //   onExit: (e) {
+                //     controller.updateHover7(false);
+                //   },
+                //   child: Row(
+                //     children: [
+                //       Container(
+                //         width: 10,
+                //         height: 45,
+                //         margin: EdgeInsets.only(right: 20, bottom: 5),
+                //         decoration: BoxDecoration(
+                //           color: controller.currentScreen.value ==
+                //                   DashBoardPanelScreens.addDevloper
+                //               ? AppColor.mainColor
+                //               : controller.hover7.value == true
+                //                   ? AppColor.mainColor.withAlpha(100)
+                //                   : Colors.transparent,
+                //           borderRadius: BorderRadius.only(
+                //             topRight: Radius.circular(10),
+                //             bottomRight: Radius.circular(10),
+                //           ),
+                //         ),
+                //       ),
+                //       Container(
+                //         width: 180,
+                //         height: 45,
+                //         margin: EdgeInsets.only(right: 20, bottom: 5),
+                //         decoration: BoxDecoration(
+                //           color: controller.currentScreen.value ==
+                //                   DashBoardPanelScreens.addDevloper
+                //               ? AppColor.mainColor
+                //               : controller.hover7.value == true
+                //                   ? AppColor.mainColor.withAlpha(100)
+                //                   : Colors.transparent,
+                //           borderRadius: BorderRadius.circular(14),
+                //         ),
+                //         child: CustomTile(
+                //           textColor: _updateColor(
+                //               controller.currentScreen,
+                //               DashBoardPanelScreens.addDevloper,
+                //               controller.hover7.value,
+                //               context: context),
+                //           titleMessage: "Add Devloper",
+                //           onTap: () {
+                //             controller.currentScreen.value =
+                //                 DashBoardPanelScreens.addDevloper;
+                //             drawerKey.currentState!.closeDrawer();
+                //           },
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                //
+                // /// 8
+                // MouseRegion(
+                //   onEnter: (e) {
+                //     controller.updateHover8(true);
+                //   },
+                //   onExit: (e) {
+                //     controller.updateHover8(false);
+                //   },
+                //   child: Row(
+                //     children: [
+                //       Container(
+                //         width: 10,
+                //         height: 45,
+                //         margin: EdgeInsets.only(right: 20, bottom: 5),
+                //         decoration: BoxDecoration(
+                //           color: controller.currentScreen.value ==
+                //                   DashBoardPanelScreens.devloper
+                //               ? AppColor.mainColor
+                //               : controller.hover8.value == true
+                //                   ? AppColor.mainColor.withAlpha(100)
+                //                   : Colors.transparent,
+                //           borderRadius: BorderRadius.only(
+                //             topRight: Radius.circular(10),
+                //             bottomRight: Radius.circular(10),
+                //           ),
+                //         ),
+                //       ),
+                //       Container(
+                //         width: 180,
+                //         height: 45,
+                //         margin: EdgeInsets.only(right: 20, bottom: 5),
+                //         decoration: BoxDecoration(
+                //           color: controller.currentScreen.value ==
+                //                   DashBoardPanelScreens.devloper
+                //               ? AppColor.mainColor
+                //               : controller.hover8.value == true
+                //                   ? AppColor.mainColor.withAlpha(100)
+                //                   : Colors.transparent,
+                //           borderRadius: BorderRadius.circular(14),
+                //         ),
+                //         child: CustomTile(
+                //           textColor: _updateColor(
+                //               controller.currentScreen,
+                //               DashBoardPanelScreens.devloper,
+                //               controller.hover8.value,
+                //               context: context),
+                //           titleMessage: "Devloper",
+                //           onTap: () {
+                //             controller.currentScreen.value =
+                //                 DashBoardPanelScreens.devloper;
+                //             drawerKey.currentState!.closeDrawer();
+                //           },
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
 
                 /// 4
                 MouseRegion(

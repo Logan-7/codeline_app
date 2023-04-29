@@ -2,8 +2,7 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 
 class CommonSnackBar {
-  static getSuccessSnackBar(
-      BuildContext context, double width, Color color, String message) {
+  static getSuccessSnackBar(BuildContext context, String message) {
     AnimatedSnackBar.rectangle(
       'Successfully',
       '$message',
@@ -16,8 +15,7 @@ class CommonSnackBar {
     );
   }
 
-  static getFailedSnackBar(
-      BuildContext context, double width, Color color, String message) {
+  static getFailedSnackBar(BuildContext context, String message) {
     AnimatedSnackBar.rectangle(
       'Failed',
       '$message',

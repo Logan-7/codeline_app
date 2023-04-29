@@ -86,7 +86,7 @@ class _AddInquiryScreenState extends State<AddInquiryScreen> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      '${DateFormat.yMd().format(DateTime.now())}',
+                                      '${DateFormat('dd/MM/yyyy').format(DateTime.now())}',
                                       style: TextStyle(
                                           letterSpacing: 3, fontSize: 16),
                                     ),
@@ -137,23 +137,23 @@ class _AddInquiryScreenState extends State<AddInquiryScreen> {
                             ),
                             Row(
                               children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    controller: controller.interestController,
-                                    onChanged: (val) {},
-                                    decoration: InputDecoration(
-                                      border: controller.outlineInputBorder,
-                                      focusedBorder:
-                                          controller.outlineInputBorder,
-                                      enabledBorder:
-                                          controller.outlineInputBorder,
-                                      hintText: 'Interest',
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 50,
-                                ),
+                                // Expanded(
+                                //   child: TextFormField(
+                                //     controller: controller.interestController,
+                                //     onChanged: (val) {},
+                                //     decoration: InputDecoration(
+                                //       border: controller.outlineInputBorder,
+                                //       focusedBorder:
+                                //           controller.outlineInputBorder,
+                                //       enabledBorder:
+                                //           controller.outlineInputBorder,
+                                //       hintText: 'Interest',
+                                //     ),
+                                //   ),
+                                // ),
+                                // SizedBox(
+                                //   width: 50,
+                                // ),
                                 Expanded(
                                   child: TextFormField(
                                     controller: controller.referenceController,
@@ -171,17 +171,61 @@ class _AddInquiryScreenState extends State<AddInquiryScreen> {
                                 SizedBox(
                                   width: 50,
                                 ),
+                                // Expanded(
+                                //   child: TextFormField(
+                                //     controller: controller.callController,
+                                //     onChanged: (val) {},
+                                //     decoration: InputDecoration(
+                                //       border: controller.outlineInputBorder,
+                                //       focusedBorder:
+                                //           controller.outlineInputBorder,
+                                //       enabledBorder:
+                                //           controller.outlineInputBorder,
+                                //       hintText: 'Called',
+                                //     ),
+                                //   ),
+                                // ),
+
                                 Expanded(
-                                  child: TextFormField(
-                                    controller: controller.callController,
-                                    onChanged: (val) {},
-                                    decoration: InputDecoration(
-                                      border: controller.outlineInputBorder,
-                                      focusedBorder:
-                                          controller.outlineInputBorder,
-                                      enabledBorder:
-                                          controller.outlineInputBorder,
-                                      hintText: 'Called',
+                                  child: Container(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: AppColor.grey400)),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20),
+                                    child: Theme(
+                                      data: ThemeData(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                      ),
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButton(
+                                          hint: Text(
+                                            controller.selectStatusType.isEmpty
+                                                ? "Status"
+                                                : controller.selectStatusType,
+                                            style: TextStyle(
+                                              color: AppColor.mainColor,
+                                            ),
+                                          ),
+                                          onChanged: (val) {
+                                            controller
+                                                .updateSelectStatusType(val!);
+                                          },
+                                          items: ['Follow Up', 'Not Interested']
+                                              .map((String items) {
+                                            return DropdownMenuItem(
+                                              value: items,
+                                              child: Text(
+                                                '$items',
+                                                style: TextStyle(),
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -252,7 +296,7 @@ class _AddInquiryScreenState extends State<AddInquiryScreen> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      controller.addInquiry();
+                                      controller.addInquiry(context);
                                     },
                                     child: Text('Save'),
                                   ),

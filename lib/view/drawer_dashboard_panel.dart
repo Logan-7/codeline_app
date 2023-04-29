@@ -1,7 +1,6 @@
 import 'package:codeline_app/controller/dashboard_controller.dart';
+import 'package:codeline_app/controller/inquiry_controller.dart';
 import 'package:codeline_app/view/dashboard/dash_board_screen.dart';
-import 'package:codeline_app/view/devloper/add_devloper.dart';
-import 'package:codeline_app/view/devloper/devloper_screen.dart';
 import 'package:codeline_app/view/fees_history/fees_history_screen.dart';
 import 'package:codeline_app/view/fees_history/fees_screen.dart';
 import 'package:codeline_app/view/inquiry/add_inquiry_screen.dart';
@@ -25,6 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DashBoardController dashBoardController = Get.put(DashBoardController());
+  InquiryController inquiryController = Get.put(InquiryController());
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
       drawer: Responsive.isMobile(context)
           ? DashBoardPanel(
               drawerKey: _scaffoldKey,
+              inquiryController: inquiryController,
             )
           : SizedBox(),
       body: Row(
@@ -47,6 +48,7 @@ class _HomePageState extends State<HomePage> {
               ? SizedBox()
               : DashBoardPanel(
                   drawerKey: _scaffoldKey,
+                  inquiryController: inquiryController,
                 ),
           Obx(
             () {
@@ -69,17 +71,21 @@ class _HomePageState extends State<HomePage> {
                                     : dashBoardController.currentScreen.value ==
                                             DashBoardPanelScreens.addInquiry
                                         ? AddInquiryScreen()
-                                        : dashBoardController
-                                                    .currentScreen.value ==
-                                                DashBoardPanelScreens
-                                                    .addDevloper
-                                            ? AddDevloperScreen()
-                                            : dashBoardController
-                                                        .currentScreen.value ==
-                                                    DashBoardPanelScreens
-                                                        .devloper
-                                                ? DevloperScreen()
-                                                : FeesHistoryScreen(),
+                                        :
+
+                                        // : dashBoardController
+                                        //             .currentScreen.value ==
+                                        //         DashBoardPanelScreens
+                                        //             .addDevloper
+                                        //     ? AddDevloperScreen()
+                                        //     : dashBoardController
+                                        //                 .currentScreen.value ==
+                                        //             DashBoardPanelScreens
+                                        //                 .devloper
+                                        //         ? DevloperScreen()
+                                        //         :
+
+                                        FeesHistoryScreen(),
               );
             },
           )

@@ -18,6 +18,8 @@ class AddFeesController extends GetxController {
   bool isCash = false;
   bool isBank = false;
   String selectMode = '';
+  String selectStudentId = '';
+  String pendingFees = '';
 
   updateCash() {
     isCash = !isCash;
@@ -57,7 +59,7 @@ class AddFeesController extends GetxController {
     installmentController.clear();
     isCash = false;
     isBank = false;
-    feeReceiptNum='';
+    feeReceiptNum = '';
     getFeesReceiptNo();
     update();
   }
@@ -71,11 +73,10 @@ class AddFeesController extends GetxController {
 
   Future<List<Document>> getStudent() async {
     List<Document> studentData = await studentCollection.get();
-
     for (int i = 0; i < studentData.length; i++) {
       studentList.add(studentData[i]['name']);
-      installmentList
-          .add('${studentData[i]['name']}..${studentData[i]['instalment']}');
+      installmentList.add(
+          '${studentData[i]['name']}..${studentData[i]['instalment']}..${studentData[i]['pendingFees']}..${studentData[i].id}');
     }
     return studentData;
   }
@@ -87,8 +88,16 @@ class AddFeesController extends GetxController {
 
       if (name.trim().toLowerCase().toString() ==
           value.trim().toLowerCase().toString()) {
-        installmentController.text = installmentList[i].split('..').last;
+        installmentController.text = installmentList[i].split('..')[1];
+        int number = int.parse(installmentController.text);
+        number++;
+        installmentController.text = number.toString();
+        pendingFees = installmentList[i].split('..')[2];
+        selectStudentId = installmentList[i].split('..').last;
         nameController.text = installmentList[i].split('..').first;
+        amountController.text = installmentList[i].split('..')[2];
+        amountNumberController.text =
+            NumberToWord().convert('en-in', int.parse(amountController.text));
       }
     }
     update();
@@ -126,5 +135,4 @@ class AddFeesController extends GetxController {
     print('------RECEIPT NO----${finalReceiptNo} ');
     update();
   }
-
 }

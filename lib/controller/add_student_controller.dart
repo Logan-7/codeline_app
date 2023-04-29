@@ -182,9 +182,10 @@ class AddStudentController extends GetxController {
 
   /// ADD DATA TO FIREBASE
   addStudentToFirebase(context) async {
-    if (pickedFileBytes == null) {
-      CommonSnackBar.getWarningSnackBar(context, 'Please Upload Image');
-    } else if (nameController.text.isEmpty) {
+    // if (pickedFileBytes == null) {
+    //   CommonSnackBar.getWarningSnackBar(context, 'Please Upload Image');
+    // } else
+    if (nameController.text.isEmpty) {
       CommonSnackBar.getWarningSnackBar(context, 'Please Enter Name');
     } else if (emailController.text.isEmpty) {
       CommonSnackBar.getWarningSnackBar(context, 'Please Enter Email');
@@ -211,6 +212,7 @@ class AddStudentController extends GetxController {
           'dob': '${DateFormat.yMd().format(selectedDate!)}',
           'education': educationDetails,
           'emailId': emailController.text,
+          "pendingFees": feesController.text,
           'instalment': installmentController.text,
           'mobile': mobileNumberController.text,
           'name': nameController.text,
@@ -224,8 +226,12 @@ class AddStudentController extends GetxController {
               .collection('LastRollNo')
               .document('tJQ6y64zEsrVbnd7LTUj')
               .update({'rollNo': rollNo});
+          CommonSnackBar.getSuccessSnackBar(
+              context, 'Student Add Successfully');
+
           resetAllValue();
           updateLoader(value: false);
+          getRollNo();
         });
       } catch (e) {
         print('------ERORRO---$e');

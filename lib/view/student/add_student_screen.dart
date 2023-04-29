@@ -114,7 +114,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      '${DateFormat.yMd().format(DateTime.now())}',
+                                      '${DateFormat('dd/MM/yyyy').format(DateTime.now())}',
                                       style: TextStyle(
                                           letterSpacing: 3, fontSize: 16),
                                     ),

@@ -1,4 +1,5 @@
 import 'package:codeline_app/widget/app_color.dart';
+import 'package:codeline_app/widget/common_snackbar.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,24 +15,35 @@ class AddInquiryController extends GetxController {
   OutlineInputBorder outlineInputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: AppColor.grey400));
+  String selectStatusType = '';
+  updateSelectStatusType(String value) {
+    selectStatusType = value;
+    update();
+  }
 
-  addInquiry() async {
-    await Firestore.instance.collection('InquiryList').add({
-      'called': callController.text,
-      'date': DateTime.now(),
-      'interest': interestController.text,
-      'mobile': mobileController.text,
-      'name': nameController.text,
-      'no': '$inquiryNo',
-      'note': noteController.text,
-      'reference': referenceController.text
-    }).then((value) async {
-      await Firestore.instance
-          .collection('LastInquiry')
-          .document('Ly21x1sZvRSMaGy1juuN')
-          .update({'no': inquiryNo});
-      resetValue();
-    });
+  addInquiry(BuildContext context) async {
+    try {
+      await Firestore.instance.collection('InquiryList').add({
+        'status': selectStatusType,
+        'date': DateTime.now(),
+        'interest': interestController.text,
+        'mobile': mobileController.text,
+        'name': nameController.text,
+        'no': '$inquiryNo',
+        'note': noteController.text,
+        'reference': referenceController.text
+      }).then((value) async {
+        await Firestore.instance
+            .collection('LastInquiry')
+            .document('Ly21x1sZvRSMaGy1juuN')
+            .update({'no': inquiryNo});
+        CommonSnackBar.getSuccessSnackBar(context, 'Inquiry Add Successfully');
+        resetValue();
+        getInquiryNo();
+      });
+    } catch (e) {
+      CommonSnackBar.getWarningSnackBar(context, 'Something went wrong');
+    }
     update();
   }
 
@@ -59,7 +71,7 @@ class AddInquiryController extends GetxController {
     referenceController.clear();
     callController.clear();
     noteController.clear();
-    inquiryNo='';
+    inquiryNo = '';
     getInquiryNo();
     update();
   }

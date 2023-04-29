@@ -71,7 +71,7 @@ class _FeesScreenState extends State<FeesScreen> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Receipt No : ${controller.feeReceiptNum}',
+                                      'Receipt No : 2022131',
                                       style: TextStyle(
                                           letterSpacing: 3, fontSize: 16),
                                     ),
@@ -88,7 +88,7 @@ class _FeesScreenState extends State<FeesScreen> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      '${DateFormat.yMd().format(DateTime.now())}',
+                                      '${DateFormat('dd/MM/yyyy').format(DateTime.now())}',
                                       style: TextStyle(
                                           letterSpacing: 3, fontSize: 16),
                                     ),
@@ -125,8 +125,14 @@ class _FeesScreenState extends State<FeesScreen> {
                                           if (val.isEmpty) {
                                             controller.installmentController
                                                 .clear();
+                                            controller.amountNumberController
+                                                .clear();
+                                            controller.amountController.clear();
                                             setState(() {});
-                                          }
+                                          } else {}
+                                        },
+                                        onSubmitted: (val) {
+                                          controller.nameController.text = val;
                                         },
                                         controller: textEditingController,
                                         focusNode: focusNode,
@@ -249,7 +255,9 @@ class _FeesScreenState extends State<FeesScreen> {
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      controller.resetAllValue();
+                                    },
                                     child: Text('Cancel'),
                                   ),
                                 ),
@@ -300,14 +308,27 @@ class _FeesScreenState extends State<FeesScreen> {
                                       //       .update({
                                       //     'No': '${controller.feeReceiptNum}'
                                       //   });
+                                      // String pendingFee =
+                                      // (int.parse(controller.pendingFees) -
+                                      //     int.parse(controller
+                                      //         .amountController.text))
+                                      //     .toString();
+                                      // await Firestore.instance
+                                      //     .collection('StudentList')
+                                      //     .document(
+                                      //     '${controller.selectStudentId}')
+                                      //     .update(
+                                      //     {'pendingFees': '${pendingFee}'});
+                                      //
                                       // });
+
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               PrintReceiptScreen(
-                                            name:
-                                                controller.nameController.text,
+                                            name: controller.nameController.text
+                                                .toUpperCase(),
                                             mode: controller.selectMode,
                                             date:
                                                 '${DateFormat.yMd().format(DateTime.now())}',
@@ -318,7 +339,8 @@ class _FeesScreenState extends State<FeesScreen> {
                                             rs: controller
                                                 .amountController.text,
                                             word: controller
-                                                .amountNumberController.text,
+                                                .amountNumberController.text
+                                                .toUpperCase(),
                                           ),
                                         ),
                                       );
