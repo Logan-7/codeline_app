@@ -1,5 +1,5 @@
 import 'package:codeline_app/controller/inquiry_controller.dart';
-import 'package:codeline_app/view/dashboard/widget/hesder_value.dart';
+import 'package:codeline_app/view/dashboard/widget/header_value.dart';
 import 'package:codeline_app/view/dashboard/widget/student_data.dart';
 import 'package:codeline_app/view/inquiry/edit_inquiry_screen.dart';
 import 'package:codeline_app/widget/app_color.dart';
