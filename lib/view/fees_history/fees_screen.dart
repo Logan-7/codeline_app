@@ -71,7 +71,7 @@ class _FeesScreenState extends State<FeesScreen> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Receipt No : 2022131',
+                                      'Receipt No : ${controller.feeReceiptNum}',
                                       style: TextStyle(
                                           letterSpacing: 3, fontSize: 16),
                                     ),
@@ -335,8 +335,7 @@ class _FeesScreenState extends State<FeesScreen> {
                                                 '${DateFormat.yMd().format(DateTime.now())}',
                                             number: controller
                                                 .installmentController.text,
-                                            receipt:
-                                                '${controller.feeReceiptNum}',
+                                            receipt: controller.feeReceiptNum,
                                             rs: controller
                                                 .amountController.text,
                                             word: controller

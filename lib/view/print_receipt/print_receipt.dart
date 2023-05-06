@@ -42,7 +42,7 @@ class _PrintReceiptScreenState extends State<PrintReceiptScreen> {
   }
 
   Future<void> loadImage() async {
-    image = await imageFromAssetBundle('assets/logo.png');
+    image = await imageFromAssetBundle('assets/images/CODELINE.svg');
   }
 
   @override
@@ -164,7 +164,7 @@ class _PrintReceiptScreenState extends State<PrintReceiptScreen> {
                     ),
                     pw.Positioned(
                       left: 85,
-                      child: pw.Text(' 0001'),
+                      child: pw.Text(' ${widget.receipt}'),
                     ),
                     pw.Positioned(
                       left: 85,
