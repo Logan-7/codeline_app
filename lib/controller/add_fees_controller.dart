@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:codeline_app/widget/app_color.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:number_to_words/number_to_words.dart';
 
 class AddFeesController extends GetxController {
@@ -9,6 +12,7 @@ class AddFeesController extends GetxController {
   TextEditingController amountController = TextEditingController();
   TextEditingController amountNumberController = TextEditingController();
   TextEditingController installmentController = TextEditingController();
+  List installmentDetails = [];
   String feeReceiptNum = '';
   OutlineInputBorder outlineInputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
@@ -43,8 +47,10 @@ class AddFeesController extends GetxController {
   /// CONVERT NUMBER TO WORD
   convertNumberToWord() {
     if (amountController.text.isNotEmpty) {
-      amountNumberController.text =
-          NumberToWord().convert('en-in', int.parse(amountController.text));
+      amountNumberController.text = NumberToWord()
+              .convert('en-in', int.parse(amountController.text))
+              .toUpperCase() +
+          'ONLY';
     } else {
       amountNumberController.text = '';
     }
@@ -69,24 +75,29 @@ class AddFeesController extends GetxController {
       Firestore.instance.collection('StudentList');
 
   List<String> studentList = [];
+  List<Map<String, dynamic>> students = [];
   List<String> installmentList = [];
 
   Future<List<Document>> getStudent() async {
     List<Document> studentData = await studentCollection.get();
     studentList.clear();
+    students.clear();
+    installmentList.clear();
     for (int i = 0; i < studentData.length; i++) {
+      students.add(studentData[i].map);
       studentList.add(studentData[i]['name']);
       installmentList.add(
           '${studentData[i]['name']}..${studentData[i]['instalment']}..${studentData[i]['pendingFees']}..${studentData[i].id}');
+      update();
     }
     return studentData;
   }
 
   /// GET INSTALMENT NO
   getInstallmentNumber(String value) {
+    installmentDetails.clear();
     for (int i = 0; i < studentList.length; i++) {
       String name = installmentList[i].toString().split('..').first;
-
       if (name.trim().toLowerCase().toString() ==
           value.trim().toLowerCase().toString()) {
         installmentController.text = installmentList[i].split('..')[1];
@@ -97,10 +108,25 @@ class AddFeesController extends GetxController {
         selectStudentId = installmentList[i].split('..').last;
         nameController.text = installmentList[i].split('..').first;
         amountController.text = installmentList[i].split('..')[2];
-        amountNumberController.text =
-            NumberToWord().convert('en-in', int.parse(amountController.text));
+        amountNumberController.text = NumberToWord()
+                .convert('en-in', int.parse(amountController.text))
+                .toUpperCase() +
+            'ONLY';
+        installmentDetails.addAll(students[i]['installment_details']);
+        log('instalmentdetails---------------${installmentDetails}');
       }
     }
+    update();
+  }
+
+  addInstallmentData() {
+    installmentDetails.add({
+      'installment_no': installmentController.text.trim().toString(),
+      'receipt_no': feeReceiptNum,
+      'installment_date': '${DateFormat.yMd().format(DateTime.now())}',
+      'amount': amountController.text.trim().toString(),
+      'paymenttype': selectMode
+    });
     update();
   }
 

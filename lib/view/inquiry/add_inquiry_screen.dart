@@ -75,20 +75,28 @@ class _AddInquiryScreenState extends State<AddInquiryScreen> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  height: 50,
-                                  width: 250,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: AppColor.grey400,
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(10),
+                                  onTap: () {
+                                    controller.selectDate1(context);
+                                  },
+                                  child: Container(
+                                    height: 55,
+                                    width: 250,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: AppColor.grey400,
+                                      ),
                                     ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '${DateFormat('dd/MM/yyyy').format(DateTime.now())}',
-                                      style: TextStyle(
-                                          letterSpacing: 3, fontSize: 16),
+                                    child: Center(
+                                      child: Text(
+                                        controller.selectDate == null
+                                            ? 'Select Date'
+                                            : '${DateFormat.yMd().format(controller.selectDate!)}',
+                                        style: TextStyle(
+                                            letterSpacing: 3, fontSize: 16),
+                                      ),
                                     ),
                                   ),
                                 )
@@ -214,8 +222,11 @@ class _AddInquiryScreenState extends State<AddInquiryScreen> {
                                             controller
                                                 .updateSelectStatusType(val!);
                                           },
-                                          items: ['Follow Up', 'Not Interested']
-                                              .map((String items) {
+                                          items: [
+                                            'New',
+                                            'Follow Up',
+                                            'Not Interested'
+                                          ].map((String items) {
                                             return DropdownMenuItem(
                                               value: items,
                                               child: Text(
@@ -230,6 +241,35 @@ class _AddInquiryScreenState extends State<AddInquiryScreen> {
                                   ),
                                 ),
                               ],
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Row(
+                              children: List.generate(
+                                  controller.courseList.length,
+                                  (index) => Row(
+                                        children: [
+                                          Checkbox(
+                                            activeColor: AppColor.mainColor,
+                                            value: controller.courseDetails
+                                                .contains(controller
+                                                    .courseList[index]),
+                                            onChanged: (value) {
+                                              controller.changeSelectedCourses(
+                                                  controller.courseList[index]);
+                                            },
+                                          ),
+                                          Text(
+                                            '${controller.courseList[index]}',
+                                            style: TextStyle(
+                                              color: AppColor.blackColor,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          SizedBox(width: 20),
+                                        ],
+                                      )),
                             ),
                             SizedBox(
                               height: 30,

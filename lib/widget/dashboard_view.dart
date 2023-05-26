@@ -7,5 +7,6 @@ enum DashBoardPanelScreens {
   feesHistory,
   addInquiry,
   addDevloper,
-  devloper
+  devloper,
+  certificates
 }

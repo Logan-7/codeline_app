@@ -15,6 +15,7 @@ class InquiryScreen extends StatefulWidget {
 
 class _InquiryScreenState extends State<InquiryScreen> {
   InquiryController inquiryController = Get.put(InquiryController());
+
   Widget build(BuildContext context) {
     return GetBuilder<InquiryController>(
       builder: (controller) {
@@ -117,12 +118,14 @@ class _InquiryScreenState extends State<InquiryScreen> {
                                 ConnectionState.done) {
                               var inquiryListData = snapshot.data;
                               return inquiryListData!.isEmpty
-                                  ? Text(
-                                      'No Fees History',
-                                      style: TextStyle(
-                                          color: AppColor.mainColor,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold),
+                                  ? Center(
+                                      child: Text(
+                                        'No Inquiry',
+                                        style: TextStyle(
+                                            color: AppColor.mainColor,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     )
                                   : ListView.separated(
                                       separatorBuilder:

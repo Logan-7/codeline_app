@@ -1,6 +1,5 @@
 import 'package:codeline_app/controller/inquiry_controller.dart';
 import 'package:codeline_app/view/dashboard/widget/header_value.dart';
-import 'package:codeline_app/view/dashboard/widget/student_data.dart';
 import 'package:codeline_app/view/inquiry/edit_inquiry_screen.dart';
 import 'package:codeline_app/widget/app_color.dart';
 import 'package:codeline_app/widget/images_path.dart';
@@ -271,7 +270,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
 
                             /// COMPLETE STUDENT
-
                             Column(
                               children: [
                                 InkWell(
@@ -415,12 +413,218 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   heading(name: 'Mobile No'),
                                 ],
                               ),
+                        Expanded(
+                          child: FutureBuilder(
+                            future: controller.getInquiryData(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Document>> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                var inquiryListData = snapshot.data;
+                                return inquiryListData!.isEmpty
+                                    ? Center(
+                                        child: Text(
+                                          'No Inquiry',
+                                          style: TextStyle(
+                                              color: AppColor.mainColor,
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    : ListView.separated(
+                                        separatorBuilder:
+                                            (BuildContext context, int index) {
+                                          return inquiryListData[index]['name']
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .contains(
+                                                    controller.searchData
+                                                        .toLowerCase(),
+                                                  )
+                                              ? Divider()
+                                              : SizedBox();
+                                        },
+                                        itemBuilder: (context, index) {
+                                          var status = inquiryListData[index]
+                                                  ['status']
+                                              .toString()
+                                              .toLowerCase();
+                                          return inquiryListData[index]['name']
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .contains(
+                                                    controller.searchData
+                                                        .toLowerCase(),
+                                                  )
+                                              ? Row(
+                                                  children: [
+                                                    Text(
+                                                      '${index + 1}',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18,
+                                                      ),
+                                                    ),
+                                                    value(
+                                                        name:
+                                                            '${inquiryListData[index]['name']}'),
+                                                    value(
+                                                        name:
+                                                            ' ${inquiryListData[index]['mobile']}'),
+                                                    value(
+                                                      name:
+                                                          ' ${inquiryListData[index]['status']}',
+                                                      color: status ==
+                                                              'Follow Up'
+                                                                  .toLowerCase()
+                                                          ? AppColor.blueColor
+                                                          : status ==
+                                                                  'Demo Started'
+                                                                      .toLowerCase()
+                                                              ? AppColor
+                                                                  .yellowColor
+                                                              : status ==
+                                                                      'Joined'
+                                                                          .toLowerCase()
+                                                                  ? AppColor
+                                                                      .greenColor
+                                                                  : AppColor
+                                                                      .redColor,
+                                                    ),
+                                                    value(
+                                                        name:
+                                                            '${inquiryListData[index]['note']}'),
+                                                    Container(
+                                                      height: 50,
+                                                      width: 200,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                                backgroundColor:
+                                                                    AppColor
+                                                                        .mainColor),
+                                                        onPressed: () {
+                                                          controller
+                                                              .updateStudentId(
+                                                                  inquiryListData[
+                                                                          index]
+                                                                      .id);
+
+                                                          controller
+                                                              .updateOpenInquiry(
+                                                                  true);
+                                                        },
+                                                        child:
+                                                            Text('Follow Up'),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                        width: 50,
+                                                        color: AppColor.grey100)
+                                                  ],
+                                                )
+                                              // InkWell(
+                                              //         onTap: () {
+                                              //           controller.updateStudentId(
+                                              //               inquiryListData[index]
+                                              //                   .id);
+                                              //
+                                              //           controller
+                                              //               .updateOpenInquiry(true);
+                                              //         },
+                                              //         child: Container(
+                                              //           padding: EdgeInsets.all(10),
+                                              //           margin: EdgeInsets.all(10),
+                                              //           decoration: BoxDecoration(
+                                              //               color:
+                                              //                   AppColor.whiteColor,
+                                              //               borderRadius:
+                                              //                   BorderRadius.circular(
+                                              //                       10)),
+                                              //           child: Column(
+                                              //             crossAxisAlignment:
+                                              //                 CrossAxisAlignment
+                                              //                     .start,
+                                              //             children: [
+                                              //               buildRow(
+                                              //                   heading: 'No',
+                                              //                   answer:
+                                              //                       ':   ${inquiryListData[index]['no']}'),
+                                              //               SizedBox(
+                                              //                 height: 5,
+                                              //               ),
+                                              //               buildRow(
+                                              //                   heading: 'Name',
+                                              //                   answer:
+                                              //                       ':   ${inquiryListData[index]['name']}'),
+                                              //               SizedBox(
+                                              //                 height: 5,
+                                              //               ),
+                                              //               buildRow(
+                                              //                   heading: 'Number',
+                                              //                   answer:
+                                              //                       ':   ${inquiryListData[index]['mobile']}'),
+                                              //               SizedBox(
+                                              //                 height: 5,
+                                              //               ),
+                                              //               buildRow(
+                                              //                 heading: 'Status',
+                                              //                 answer:
+                                              //                     ':   ${inquiryListData[index]['status']}',
+                                              //                 answerColor: inquiryListData[
+                                              //                                     index]
+                                              //                                 [
+                                              //                                 'status']
+                                              //                             .toString()
+                                              //                             .toLowerCase() ==
+                                              //                         'Follow Up'
+                                              //                             .toLowerCase()
+                                              //                     ? AppColor.blueColor
+                                              //                     : AppColor.redColor,
+                                              //               ),
+                                              //               SizedBox(
+                                              //                 height: 5,
+                                              //               ),
+                                              //               buildRow(
+                                              //                   heading: 'Note',
+                                              //                   answer:
+                                              //                       ':   ${inquiryListData[index]['note']}'),
+                                              //             ],
+                                              //           ),
+                                              //         ),
+                                              //       )
+                                              : SizedBox();
+                                        },
+                                        itemCount: snapshot.data!.length,
+                                      );
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColor.mainColor,
+                                  ),
+                                );
+                              } else {
+                                return Text(
+                                  'Try Again',
+                                  style: TextStyle(
+                                      color: AppColor.mainColor,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                );
+                              }
+                            },
+                          ),
+                        ),
                         SizedBox(
                           height: 20,
                         ),
-                        controller.selectedDashboardIndex == 1
-                            ? InquiryData(controller: controller, data: data)
-                            : StudentData(controller: controller),
+                        // controller.selectedDashboardIndex == 1
+                        //     ? InquiryData(controller: controller, data: data)
+                        //     : StudentData(controller: controller),
                       ],
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:codeline_app/controller/dashboard_controller.dart';
 import 'package:codeline_app/controller/inquiry_controller.dart';
+import 'package:codeline_app/view/certificates/certificates_screen.dart';
 import 'package:codeline_app/view/dashboard/dash_board_screen.dart';
 import 'package:codeline_app/view/fees_history/fees_history_screen.dart';
 import 'package:codeline_app/view/fees_history/fees_screen.dart';
@@ -15,6 +16,8 @@ import 'package:codeline_app/widget/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controller/student_controller.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -25,6 +28,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DashBoardController dashBoardController = Get.put(DashBoardController());
   InquiryController inquiryController = Get.put(InquiryController());
+  StudentController studentController = Get.put(StudentController());
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,7 @@ class _HomePageState extends State<HomePage> {
           ? DashBoardPanel(
               drawerKey: _scaffoldKey,
               inquiryController: inquiryController,
+              studentController: studentController,
             )
           : SizedBox(),
       body: Row(
@@ -49,6 +54,7 @@ class _HomePageState extends State<HomePage> {
               : DashBoardPanel(
                   drawerKey: _scaffoldKey,
                   inquiryController: inquiryController,
+                  studentController: studentController,
                 ),
           Obx(
             () {
@@ -85,7 +91,12 @@ class _HomePageState extends State<HomePage> {
                                         //         ? DevloperScreen()
                                         //         :
 
-                                        FeesHistoryScreen(),
+                                        dashBoardController
+                                                    .currentScreen.value ==
+                                                DashBoardPanelScreens
+                                                    .feesHistory
+                                            ? FeesHistoryScreen()
+                                            : CertificateScreen(),
               );
             },
           )

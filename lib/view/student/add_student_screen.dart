@@ -54,32 +54,32 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: InkWell(
-                                onTap: () {
-                                  controller.pickImage();
-                                },
-                                child: Container(
-                                  height: 150,
-                                  width: 150,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  decoration: BoxDecoration(
-                                      color: AppColor.grey300,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: controller.pickedFileBytes != null
-                                      ? Image.memory(
-                                          controller.pickedFileBytes!,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Center(
-                                          child: Icon(
-                                            Icons.camera_alt_outlined,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ),
+                            // Align(
+                            //   alignment: Alignment.topRight,
+                            //   child: InkWell(
+                            //     onTap: () {
+                            //       controller.pickImage();
+                            //     },
+                            //     child: Container(
+                            //       height: 150,
+                            //       width: 150,
+                            //       clipBehavior: Clip.antiAliasWithSaveLayer,
+                            //       decoration: BoxDecoration(
+                            //           color: AppColor.grey300,
+                            //           borderRadius: BorderRadius.circular(10)),
+                            //       child: controller.pickedFileBytes != null
+                            //           ? Image.memory(
+                            //               controller.pickedFileBytes!,
+                            //               fit: BoxFit.cover,
+                            //             )
+                            //           : Center(
+                            //               child: Icon(
+                            //                 Icons.camera_alt_outlined,
+                            //               ),
+                            //             ),
+                            //     ),
+                            //   ),
+                            // ),
                             SizedBox(
                               height: 40,
                             ),
@@ -103,23 +103,31 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  height: 50,
-                                  width: 250,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: AppColor.grey400,
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(10),
+                                  onTap: () {
+                                    controller.selectAdmissionDate(context);
+                                  },
+                                  child: Container(
+                                    height: 55,
+                                    width: 250,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: AppColor.grey400,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        controller.selectedDate1 == null
+                                            ? 'Select Date'
+                                            : '${DateFormat.yMd().format(controller.selectedDate1!)}',
+                                        style: TextStyle(
+                                            letterSpacing: 3, fontSize: 16),
+                                      ),
                                     ),
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      '${DateFormat('dd/MM/yyyy').format(DateTime.now())}',
-                                      style: TextStyle(
-                                          letterSpacing: 3, fontSize: 16),
-                                    ),
-                                  ),
-                                ),
+                                )
                               ],
                             ),
                             SizedBox(
@@ -193,6 +201,22 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                               children: [
                                 Expanded(
                                   child: TextFormField(
+                                    controller: controller.educationController,
+                                    decoration: InputDecoration(
+                                      border: controller.outlineInputBorder,
+                                      focusedBorder:
+                                          controller.outlineInputBorder,
+                                      enabledBorder:
+                                          controller.outlineInputBorder,
+                                      hintText: 'Education',
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
                                     controller:
                                         controller.mobileNumberController,
                                     decoration: InputDecoration(
@@ -240,285 +264,176 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                             SizedBox(
                               height: 40,
                             ),
+
+                            ///education-------------
+                            // Row(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Text(
+                            //       'Education  : ',
+                            //       style: TextStyle(
+                            //           color: AppColor.blackColor,
+                            //           fontSize: 20,
+                            //           fontWeight: FontWeight.w600),
+                            //     ),
+                            //     Expanded(
+                            //       child: Column(
+                            //         children: [
+                            //           Row(
+                            //             children: [
+                            //               ...List.generate(
+                            //                 4,
+                            //                 (index) {
+                            //                   return Expanded(
+                            //                     child: Container(
+                            //                       height: 50,
+                            //                       alignment: Alignment.center,
+                            //                       decoration: BoxDecoration(
+                            //                         border: Border(
+                            //                           bottom: BorderSide(),
+                            //                           top: BorderSide(),
+                            //                           left: BorderSide(),
+                            //                           right: BorderSide(
+                            //                             color: index == 3
+                            //                                 ? Colors.black
+                            //                                 : Colors
+                            //                                     .transparent,
+                            //                           ),
+                            //                         ),
+                            //                       ),
+                            //                       child: Text(
+                            //                         '${controller.education[index]}',
+                            //                         style: TextStyle(
+                            //                             color:
+                            //                                 AppColor.blackColor,
+                            //                             fontSize: 20,
+                            //                             fontWeight:
+                            //                                 FontWeight.w600),
+                            //                       ),
+                            //                     ),
+                            //                   );
+                            //                 },
+                            //               ),
+                            //               IconButton(
+                            //                 splashRadius: 20,
+                            //                 onPressed: () {
+                            //                   controller
+                            //                       .updateEducationLength();
+                            //                 },
+                            //                 icon: Icon(Icons.add),
+                            //               )
+                            //             ],
+                            //           ),
+                            //           Column(
+                            //             children: [
+                            //               ...List.generate(
+                            //                 controller.educationLength,
+                            //                 (index1) {
+                            //                   return Row(
+                            //                     children: [
+                            //                       ...List.generate(
+                            //                         4,
+                            //                         (index) {
+                            //                           return Expanded(
+                            //                             child: Container(
+                            //                               height: 50,
+                            //                               padding: EdgeInsets
+                            //                                   .symmetric(
+                            //                                       horizontal:
+                            //                                           10),
+                            //                               decoration:
+                            //                                   BoxDecoration(
+                            //                                 border: Border(
+                            //                                   bottom:
+                            //                                       BorderSide(),
+                            //                                   top: BorderSide(),
+                            //                                   left:
+                            //                                       BorderSide(),
+                            //                                   right: BorderSide(
+                            //                                     color: index ==
+                            //                                             3
+                            //                                         ? Colors
+                            //                                             .black
+                            //                                         : Colors
+                            //                                             .transparent,
+                            //                                   ),
+                            //                                 ),
+                            //                               ),
+                            //                               child: TextFormField(
+                            //                                 controller: controller
+                            //                                         .educationDetailsController[
+                            //                                     index1][index],
+                            //                                 onChanged: (val) {
+                            //                                   print(
+                            //                                       '--------$val');
+                            //                                   controller
+                            //                                       .addValueToEducationList(
+                            //                                     value: val,
+                            //                                     index: index1,
+                            //                                     rowIndex: index,
+                            //                                   );
+                            //                                 },
+                            //                                 textAlign: TextAlign
+                            //                                     .center,
+                            //                                 decoration:
+                            //                                     InputDecoration(
+                            //                                   border:
+                            //                                       InputBorder
+                            //                                           .none,
+                            //                                 ),
+                            //                               ),
+                            //                             ),
+                            //                           );
+                            //                         },
+                            //                       ),
+                            //                       IconButton(
+                            //                         splashRadius: 20,
+                            //                         onPressed: () {
+                            //                           controller
+                            //                               .removeEducationLength(
+                            //                                   index1);
+                            //                         },
+                            //                         icon: Icon(
+                            //                           Icons.remove,
+                            //                         ),
+                            //                       )
+                            //                     ],
+                            //                   );
+                            //                 },
+                            //               )
+                            //             ],
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
+
                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Education  : ',
-                                  style: TextStyle(
-                                      color: AppColor.blackColor,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Row(
+                              children: List.generate(
+                                  controller.courseList.length,
+                                  (index) => Row(
                                         children: [
-                                          ...List.generate(
-                                            4,
-                                            (index) {
-                                              return Expanded(
-                                                child: Container(
-                                                  height: 50,
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                    border: Border(
-                                                      bottom: BorderSide(),
-                                                      top: BorderSide(),
-                                                      left: BorderSide(),
-                                                      right: BorderSide(
-                                                        color: index == 3
-                                                            ? Colors.black
-                                                            : Colors
-                                                                .transparent,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: Text(
-                                                    '${controller.education[index]}',
-                                                    style: TextStyle(
-                                                        color:
-                                                            AppColor.blackColor,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                ),
-                                              );
+                                          Checkbox(
+                                            activeColor: AppColor.mainColor,
+                                            value: controller.courseDetails
+                                                .contains(controller
+                                                    .courseList[index]),
+                                            onChanged: (value) {
+                                              controller.changeSelectedCourses(
+                                                  controller.courseList[index]);
                                             },
                                           ),
-                                          IconButton(
-                                            splashRadius: 20,
-                                            onPressed: () {
-                                              controller
-                                                  .updateEducationLength();
-                                            },
-                                            icon: Icon(Icons.add),
-                                          )
+                                          Text(
+                                            '${controller.courseList[index]}',
+                                            style: TextStyle(
+                                              color: AppColor.blackColor,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          SizedBox(width: 20),
                                         ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          ...List.generate(
-                                            controller.educationLength,
-                                            (index1) {
-                                              return Row(
-                                                children: [
-                                                  ...List.generate(
-                                                    4,
-                                                    (index) {
-                                                      return Expanded(
-                                                        child: Container(
-                                                          height: 50,
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      10),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border(
-                                                              bottom:
-                                                                  BorderSide(),
-                                                              top: BorderSide(),
-                                                              left:
-                                                                  BorderSide(),
-                                                              right: BorderSide(
-                                                                color: index ==
-                                                                        3
-                                                                    ? Colors
-                                                                        .black
-                                                                    : Colors
-                                                                        .transparent,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          child: TextFormField(
-                                                            controller: controller
-                                                                    .educationDetailsController[
-                                                                index1][index],
-                                                            onChanged: (val) {
-                                                              print(
-                                                                  '--------$val');
-                                                              controller
-                                                                  .addValueToEducationList(
-                                                                value: val,
-                                                                index: index1,
-                                                                rowIndex: index,
-                                                              );
-                                                            },
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              border:
-                                                                  InputBorder
-                                                                      .none,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                  IconButton(
-                                                    splashRadius: 20,
-                                                    onPressed: () {
-                                                      controller
-                                                          .removeEducationLength(
-                                                              index1);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.remove,
-                                                    ),
-                                                  )
-                                                ],
-                                              );
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                runSpacing: 30,
-                                spacing: 10,
-                                children: [
-                                  Text(
-                                    'Course  : ',
-                                    style: TextStyle(
-                                        color: AppColor.blackColor,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-
-                                  /// C/C++
-                                  Checkbox(
-                                    activeColor: AppColor.mainColor,
-                                    value: controller.iscCPlus,
-                                    onChanged: (value) {
-                                      controller.updateCCPlus();
-                                    },
-                                  ),
-                                  Text(
-                                    'C/C++',
-                                    style: TextStyle(
-                                      color: AppColor.blackColor,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-
-                                  /// DART
-                                  Checkbox(
-                                    activeColor: AppColor.mainColor,
-                                    value: controller.isDart,
-                                    onChanged: (value) {
-                                      controller.updateDart();
-                                    },
-                                  ),
-                                  Text(
-                                    'Dart',
-                                    style: TextStyle(
-                                      color: AppColor.blackColor,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-
-                                  ///FLUTTER
-                                  Checkbox(
-                                    activeColor: AppColor.mainColor,
-                                    value: controller.isFlutter,
-                                    onChanged: (value) {
-                                      controller.updateFlutter();
-                                    },
-                                  ),
-                                  Text(
-                                    'Flutter',
-                                    style: TextStyle(
-                                      color: AppColor.blackColor,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-
-                                  ///UI/UX
-                                  Checkbox(
-                                    activeColor: AppColor.mainColor,
-                                    value: controller.isUiUx,
-                                    onChanged: (value) {
-                                      controller.updateUiUx();
-                                    },
-                                  ),
-                                  Text(
-                                    'UI/UX',
-                                    style: TextStyle(
-                                      color: AppColor.blackColor,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-
-                                  ///FULL STACK
-                                  Checkbox(
-                                    activeColor: AppColor.mainColor,
-                                    value: controller.isFullStack,
-                                    onChanged: (value) {
-                                      controller.updateFullStack();
-                                    },
-                                  ),
-                                  Text(
-                                    'FULL STACK',
-                                    style: TextStyle(
-                                      color: AppColor.blackColor,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-
-                                  ///WEB
-                                  Checkbox(
-                                    activeColor: AppColor.mainColor,
-                                    value: controller.isWeb,
-                                    onChanged: (value) {
-                                      controller.updateWeb();
-                                    },
-                                  ),
-                                  Text(
-                                    'Web',
-                                    style: TextStyle(
-                                      color: AppColor.blackColor,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-
-                                  /// NODE JS
-                                  Checkbox(
-                                    activeColor: AppColor.mainColor,
-                                    value: controller.isNodeJs,
-                                    onChanged: (value) {
-                                      controller.updateNodeJs();
-                                    },
-                                  ),
-                                  Text(
-                                    'Node Js',
-                                    style: TextStyle(
-                                      color: AppColor.blackColor,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                      )),
                             ),
                             SizedBox(
                               height: 40,

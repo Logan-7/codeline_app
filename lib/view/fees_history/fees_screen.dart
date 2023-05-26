@@ -2,6 +2,7 @@ import 'package:codeline_app/controller/add_fees_controller.dart';
 import 'package:codeline_app/view/print_receipt/print_receipt.dart';
 import 'package:codeline_app/widget/app_color.dart';
 import 'package:codeline_app/widget/responsive.dart';
+import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -151,7 +152,7 @@ class _FeesScreenState extends State<FeesScreen> {
                                     onSelected: (String selection) {
                                       controller
                                           .getInstallmentNumber(selection);
-                                      setState(() {});
+                                      //     setState(() {});
                                       debugPrint(
                                           'You just selected${selection}');
                                     },
@@ -289,39 +290,52 @@ class _FeesScreenState extends State<FeesScreen> {
                                       ),
                                     ),
                                     onPressed: () async {
-                                      // await Firestore.instance
-                                      //     .collection('FeesHistory')
-                                      //     .add({
-                                      //   'amount':
-                                      //       controller.amountController.text,
-                                      //   'date': DateTime.now(),
-                                      //   'instalment': controller
-                                      //       .installmentController.text,
-                                      //   'mode': controller.selectMode,
-                                      //   'name': controller.nameController.text,
-                                      //   'no': '${controller.feeReceiptNum}',
-                                      //   'words': controller
-                                      //       .amountNumberController.text
-                                      // }).then((value) async {
-                                      //   await Firestore.instance
-                                      //       .collection('FeesHistory')
-                                      //       .document('nGb5QDZH5Ig1yZNqF0V5')
-                                      //       .update({
-                                      //     'No': '${controller.feeReceiptNum}'
-                                      //   });
-                                      // String pendingFee =
-                                      // (int.parse(controller.pendingFees) -
-                                      //     int.parse(controller
-                                      //         .amountController.text))
-                                      //     .toString();
-                                      // await Firestore.instance
-                                      //     .collection('StudentList')
-                                      //     .document(
-                                      //     '${controller.selectStudentId}')
-                                      //     .update(
-                                      //     {'pendingFees': '${pendingFee}'});
-                                      //
-                                      // });
+                                      await Firestore.instance
+                                          .collection('FeesHistory')
+                                          .add({
+                                        'amount':
+                                            controller.amountController.text,
+                                        'date': DateTime.now(),
+                                        'instalment': controller
+                                            .installmentController.text,
+                                        'mode': controller.selectMode,
+                                        'name': controller.nameController.text,
+                                        'no': controller.feeReceiptNum,
+                                        'words': controller
+                                            .amountNumberController.text
+                                      }).then((value) async {
+                                        await Firestore.instance
+                                            .collection('LastReceipt')
+                                            .document('nGb5QDZH5Ig1yZNqF0V5')
+                                            .update({
+                                          'No': '${controller.feeReceiptNum}'
+                                        });
+
+                                        String pendingFee =
+                                            (int.parse(controller.pendingFees) -
+                                                    int.parse(controller
+                                                        .amountController.text))
+                                                .toString();
+
+                                        ///adding new data of installments---------------------------------
+
+                                        controller.addInstallmentData();
+
+                                        ///update installmentdata in firebase-----------------------------------
+
+                                        await Firestore.instance
+                                            .collection('StudentList')
+                                            .document(
+                                                '${controller.selectStudentId}')
+                                            .update({
+                                          'pendingFees': '${pendingFee}',
+                                          'instalment':
+                                              '${controller.installmentController.text.trim().toString()}',
+                                          'installment_details':
+                                              controller.installmentDetails,
+                                        });
+                                      });
+                                      setState(() {});
 
                                       Navigator.push(
                                         context,
@@ -344,6 +358,7 @@ class _FeesScreenState extends State<FeesScreen> {
                                           ),
                                         ),
                                       );
+                                      controller.getStudent();
                                     },
                                     child: Text('Save & Print'),
                                   ),

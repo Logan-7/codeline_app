@@ -102,12 +102,14 @@ class _FeesHistoryScreenState extends State<FeesHistoryScreen> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         var feesData = snapshot.data;
                         return feesData!.isEmpty
-                            ? Text(
-                                'No Fees History',
-                                style: TextStyle(
-                                    color: AppColor.mainColor,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold),
+                            ? Center(
+                                child: Text(
+                                  'No Fees History',
+                                  style: TextStyle(
+                                      color: AppColor.mainColor,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               )
                             : ListView.separated(
                                 separatorBuilder:

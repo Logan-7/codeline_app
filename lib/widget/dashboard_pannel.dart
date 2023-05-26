@@ -1,5 +1,6 @@
 import 'package:codeline_app/controller/dashboard_controller.dart';
 import 'package:codeline_app/controller/inquiry_controller.dart';
+import 'package:codeline_app/controller/student_controller.dart';
 import 'package:codeline_app/widget/app_color.dart';
 import 'package:codeline_app/widget/dashboard_view.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +11,13 @@ import 'tiles.dart';
 class DashBoardPanel extends StatelessWidget {
   final drawerKey;
   final InquiryController inquiryController;
+  final StudentController studentController;
 
   const DashBoardPanel(
-      {super.key, required this.drawerKey, required this.inquiryController});
+      {super.key,
+      required this.drawerKey,
+      required this.inquiryController,
+      required this.studentController});
 
   /// update __icon__ and __text__ color when button is pressed in
   /// dashboard panel
@@ -96,7 +101,6 @@ class DashBoardPanel extends StatelessWidget {
                           controller.currentScreen.value =
                               DashBoardPanelScreens.dashboard;
                           inquiryController.updateOpenInquiry(false);
-
                           drawerKey.currentState!.closeDrawer();
                         },
                       ),
@@ -158,6 +162,8 @@ class DashBoardPanel extends StatelessWidget {
                         onTap: () {
                           controller.currentScreen.value =
                               DashBoardPanelScreens.studentList;
+                          studentController.updateOpenDetails(false);
+
                           drawerKey.currentState!.closeDrawer();
                         },
                       ),
@@ -475,7 +481,7 @@ class DashBoardPanel extends StatelessWidget {
               //   height: 10,
               // ),
 
-              /// 4
+              /// 8
               MouseRegion(
                 onEnter: (e) {
                   controller.updateHover4(true);
@@ -534,7 +540,7 @@ class DashBoardPanel extends StatelessWidget {
                 height: 10,
               ),
 
-              /// 5
+              /// 9
               MouseRegion(
                 onEnter: (e) {
                   controller.updateHover5(true);
@@ -584,6 +590,68 @@ class DashBoardPanel extends StatelessWidget {
                         onTap: () {
                           controller.currentScreen.value =
                               DashBoardPanelScreens.feesHistory;
+                          drawerKey.currentState!.closeDrawer();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              /// 10
+
+              MouseRegion(
+                onEnter: (e) {
+                  controller.updateHover9(true);
+                },
+                onExit: (e) {
+                  controller.updateHover9(false);
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      width: 10,
+                      height: 45,
+                      margin: EdgeInsets.only(right: 20, bottom: 5),
+                      decoration: BoxDecoration(
+                        color: controller.currentScreen.value ==
+                                DashBoardPanelScreens.certificates
+                            ? AppColor.mainColor
+                            : controller.hover9.value == true
+                                ? AppColor.mainColor.withAlpha(100)
+                                : Colors.transparent,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 180,
+                      height: 45,
+                      margin: EdgeInsets.only(right: 20, bottom: 5),
+                      decoration: BoxDecoration(
+                        color: controller.currentScreen.value ==
+                                DashBoardPanelScreens.certificates
+                            ? AppColor.mainColor
+                            : controller.hover9.value == true
+                                ? AppColor.mainColor.withAlpha(100)
+                                : Colors.transparent,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: CustomTile(
+                        titleMessage: "Certificates",
+                        textColor: _updateColor(
+                            controller.currentScreen,
+                            DashBoardPanelScreens.certificates,
+                            controller.hover9.value,
+                            context: context),
+                        onTap: () {
+                          controller.currentScreen.value =
+                              DashBoardPanelScreens.certificates;
                           drawerKey.currentState!.closeDrawer();
                         },
                       ),
