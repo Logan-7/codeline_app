@@ -28,7 +28,7 @@ class AddInquiryController extends GetxController {
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(1900),
-        lastDate: DateTime(3000));
+        lastDate: DateTime.now());
     if (picked != null) {
       selectDate = picked;
     }
@@ -62,29 +62,42 @@ class AddInquiryController extends GetxController {
   }
 
   addInquiry(BuildContext context) async {
-    try {
-      await Firestore.instance.collection('InquiryList').add({
-        'status': selectStatusType,
-        'date': DateTime.parse(selectDate!.toString()),
-        'followUpdate': DateTime.now(),
-        'interest': interestController.text,
-        'mobile': mobileController.text,
-        'name': nameController.text,
-        'no': '$inquiryNo',
-        'note': noteController.text,
-        'reference': referenceController.text,
-        'courseDetails': courseDetails,
-      }).then((value) async {
-        await Firestore.instance
-            .collection('LastInquiry')
-            .document('Ly21x1sZvRSMaGy1juuN')
-            .update({'no': inquiryNo});
-        CommonSnackBar.getSuccessSnackBar(context, 'Inquiry Add Successfully');
-        resetValue();
-        getInquiryNo();
-      });
-    } catch (e) {
-      CommonSnackBar.getWarningSnackBar(context, 'Something went wrong');
+    if (selectDate == null) {
+      CommonSnackBar.getWarningSnackBar(context, 'Please Select Date');
+    } else if (nameController.text.isEmpty) {
+      CommonSnackBar.getWarningSnackBar(context, 'Please Enter Name');
+    } else if (mobileController.text.isEmpty) {
+      CommonSnackBar.getWarningSnackBar(context, 'Please Enter MobileNo');
+    } else if (selectStatusType.isEmpty) {
+      CommonSnackBar.getWarningSnackBar(context, 'Please Select Status');
+    } else if (courseDetails.isEmpty) {
+      CommonSnackBar.getWarningSnackBar(context, 'Please Select Course');
+    } else {
+      try {
+        await Firestore.instance.collection('InquiryList').add({
+          'status': selectStatusType,
+          'date': DateTime.parse(selectDate!.toString()),
+          'followUpdate': DateTime.now(),
+          'interest': interestController.text,
+          'mobile': mobileController.text,
+          'name': nameController.text,
+          'no': '$inquiryNo',
+          'note': noteController.text,
+          'reference': referenceController.text,
+          'courseDetails': courseDetails,
+        }).then((value) async {
+          await Firestore.instance
+              .collection('LastInquiry')
+              .document('Ly21x1sZvRSMaGy1juuN')
+              .update({'no': inquiryNo});
+          CommonSnackBar.getSuccessSnackBar(
+              context, 'Inquiry Add Successfully');
+          resetValue();
+          getInquiryNo();
+        });
+      } catch (e) {
+        CommonSnackBar.getWarningSnackBar(context, 'Something went wrong');
+      }
     }
     update();
   }

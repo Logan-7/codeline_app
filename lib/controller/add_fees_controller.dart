@@ -119,7 +119,7 @@ class AddFeesController extends GetxController {
     update();
   }
 
-  addInstallmentData() {
+  addInstallmentData() async {
     installmentDetails.add({
       'installment_no': installmentController.text.trim().toString(),
       'receipt_no': feeReceiptNum,
@@ -128,6 +128,19 @@ class AddFeesController extends GetxController {
       'paymenttype': selectMode
     });
     update();
+
+    // String pendingFee =
+    //     (int.parse(pendingFees) - int.parse(amountController.text)).toString();
+    //
+    // await Firestore.instance
+    //     .collection('StudentList')
+    //     .document('${selectStudentId}')
+    //     .update({
+    //   'pendingFees': '${pendingFee}',
+    //   'instalment': '${installmentController.text.trim().toString()}',
+    //   'installment_details': installmentDetails,
+    // });
+    // update();
   }
 
   /// FOR INQUIRY NUMBER

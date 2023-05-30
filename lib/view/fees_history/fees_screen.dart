@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../widget/common_snackbar.dart';
+
 class FeesScreen extends StatefulWidget {
   const FeesScreen({Key? key}) : super(key: key);
 
@@ -290,75 +292,103 @@ class _FeesScreenState extends State<FeesScreen> {
                                       ),
                                     ),
                                     onPressed: () async {
-                                      await Firestore.instance
-                                          .collection('FeesHistory')
-                                          .add({
-                                        'amount':
-                                            controller.amountController.text,
-                                        'date': DateTime.now(),
-                                        'instalment': controller
-                                            .installmentController.text,
-                                        'mode': controller.selectMode,
-                                        'name': controller.nameController.text,
-                                        'no': controller.feeReceiptNum,
-                                        'words': controller
-                                            .amountNumberController.text
-                                      }).then((value) async {
-                                        await Firestore.instance
-                                            .collection('LastReceipt')
-                                            .document('nGb5QDZH5Ig1yZNqF0V5')
-                                            .update({
-                                          'No': '${controller.feeReceiptNum}'
-                                        });
+                                      if (controller
+                                          .nameController.text.isEmpty) {
+                                        CommonSnackBar.getWarningSnackBar(
+                                            context, 'Please Enter Name');
+                                      } else if (controller
+                                          .amountController.text.isEmpty) {
+                                        CommonSnackBar.getWarningSnackBar(
+                                            context, 'Please Enter Amount');
+                                      } else if (controller
+                                          .installmentController.text.isEmpty) {
+                                        CommonSnackBar.getWarningSnackBar(
+                                            context,
+                                            'Please Enter InstallmentNo');
+                                      } else if (controller
+                                          .selectMode.isEmpty) {
+                                        CommonSnackBar.getWarningSnackBar(
+                                            context,
+                                            'Please Select Amount Mode');
+                                      } else {
+                                        try {
+                                          await Firestore.instance
+                                              .collection('FeesHistory')
+                                              .add({
+                                            'amount': controller
+                                                .amountController.text,
+                                            'date': DateTime.now(),
+                                            'instalment': controller
+                                                .installmentController.text,
+                                            'mode': controller.selectMode,
+                                            'name':
+                                                controller.nameController.text,
+                                            'no': controller.feeReceiptNum,
+                                            'words': controller
+                                                .amountNumberController.text
+                                          }).then((value) async {
+                                            await Firestore.instance
+                                                .collection('LastReceipt')
+                                                .document(
+                                                    'nGb5QDZH5Ig1yZNqF0V5')
+                                                .update({
+                                              'No':
+                                                  '${controller.feeReceiptNum}'
+                                            });
 
-                                        String pendingFee =
-                                            (int.parse(controller.pendingFees) -
+                                            ///adding new data of installments---------------------------------
+
+                                            controller.addInstallmentData();
+
+                                            String pendingFee = (int.parse(
+                                                        controller
+                                                            .pendingFees) -
                                                     int.parse(controller
                                                         .amountController.text))
                                                 .toString();
 
-                                        ///adding new data of installments---------------------------------
+                                            ///update installmentdata in firebase-----------------------------------
 
-                                        controller.addInstallmentData();
+                                            await Firestore.instance
+                                                .collection('StudentList')
+                                                .document(
+                                                    '${controller.selectStudentId}')
+                                                .update({
+                                              'pendingFees': '${pendingFee}',
+                                              'instalment':
+                                                  '${controller.installmentController.text.trim().toString()}',
+                                              'installment_details':
+                                                  controller.installmentDetails,
+                                            });
+                                          });
+                                          // setState(() {});
 
-                                        ///update installmentdata in firebase-----------------------------------
-
-                                        await Firestore.instance
-                                            .collection('StudentList')
-                                            .document(
-                                                '${controller.selectStudentId}')
-                                            .update({
-                                          'pendingFees': '${pendingFee}',
-                                          'instalment':
-                                              '${controller.installmentController.text.trim().toString()}',
-                                          'installment_details':
-                                              controller.installmentDetails,
-                                        });
-                                      });
-                                      setState(() {});
-
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PrintReceiptScreen(
-                                            name: controller.nameController.text
-                                                .toUpperCase(),
-                                            mode: controller.selectMode,
-                                            date:
-                                                '${DateFormat.yMd().format(DateTime.now())}',
-                                            number: controller
-                                                .installmentController.text,
-                                            receipt: controller.feeReceiptNum,
-                                            rs: controller
-                                                .amountController.text,
-                                            word: controller
-                                                .amountNumberController.text
-                                                .toUpperCase(),
-                                          ),
-                                        ),
-                                      );
-                                      controller.getStudent();
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PrintReceiptScreen(
+                                                name: controller
+                                                    .nameController.text
+                                                    .toUpperCase(),
+                                                mode: controller.selectMode,
+                                                date:
+                                                    '${DateFormat.yMd().format(DateTime.now())}',
+                                                number: controller
+                                                    .installmentController.text,
+                                                receipt:
+                                                    controller.feeReceiptNum,
+                                                rs: controller
+                                                    .amountController.text,
+                                                word: controller
+                                                    .amountNumberController.text
+                                                    .toUpperCase(),
+                                              ),
+                                            ),
+                                          );
+                                          controller.getStudent();
+                                        } catch (e) {}
+                                      }
                                     },
                                     child: Text('Save & Print'),
                                   ),

@@ -146,7 +146,6 @@ class AddStudentController extends GetxController {
       CommonSnackBar.getWarningSnackBar(context, 'Please Enter Education');
     } else {
       updateLoader(value: true);
-
       try {
         // String? studentProfile =
         //     await uploadFile(data: pickedFileBytes, name: nameController.text);
@@ -168,7 +167,7 @@ class AddStudentController extends GetxController {
           'name': nameController.text,
           'parentsNo': parentMobileNumberController.text,
           'rollNo': '$rollNo',
-          'installment_details': [{}],
+          'installment_details': [],
           // "profile": studentProfile,
           'time': DateTime.now(),
           'totalFees': feesController.text

@@ -20,6 +20,7 @@ class StudentController extends GetxController {
   TextEditingController addressController = TextEditingController();
   TextEditingController educationController = TextEditingController();
 
+  String pendingFee = '';
   String rollNo = '';
   String studentId = '';
   DateTime? selectedDate;
@@ -136,21 +137,22 @@ class StudentController extends GetxController {
   }
 
   /// UPDATE PARTICULAR DATA
-
+  List totalInstallmentDetails = [];
   updateStudentDetails(BuildContext context) async {
     try {
-      data.clear();
-
-      // for (var element in textEditionController) {
-      //   data.add({
-      //     "Installment No": element[0].text,
-      //     "Receipt No": element[1].text,
-      //     "Date": element[2].text,
-      //     "Amount": element[3].text,
-      //     "PaymentMode": element[4].text,
-      //   });
-      // }
-
+      installmentDetails.clear();
+      String fee = '';
+      controllers.forEach((element) {
+        installmentDetails.add({
+          "installment_no": element[0].text,
+          "receipt_no": element[1].text,
+          "installment_date": element[2].text,
+          "amount": element[3].text,
+          "paymenttype": element[4].text,
+        });
+        fee = (int.parse(pendingFee) - int.parse(element[3].text)).toString();
+      });
+      update();
       await studentCollection.document(studentId).update({
         'name': nameController.text,
         'emailId': emailController.text,
@@ -162,12 +164,16 @@ class StudentController extends GetxController {
         'courseDuration': courseDurationController.text,
         'instalment': installmentController.text,
         'totalFees': feesController.text,
-        'installment_details': data
+        'pendingFees': fee,
+        'installment_details': installmentDetails
       }).whenComplete(() {
+        installmentDetails.clear();
+
         CommonSnackBar.getSuccessSnackBar(
             context, 'Student Data Updated Successfully');
       });
     } catch (e) {
+      print(e);
       CommonSnackBar.getFailedSnackBar(context, 'Something went wrong!');
     }
     update();
@@ -178,25 +184,14 @@ class StudentController extends GetxController {
   Map<String, dynamic> studData = {};
 
   List installment = [];
+  List<List<TextEditingController>> controllers = [];
 
   Future getStudData() async {
     Document data1 = await studentCollection.document(studentId).get();
     Map<String, dynamic>? studentData = data1.map;
 
     courseDetails.clear();
-
-    textEditionController.clear();
-    // studentData['installment_details'].forEach((e) {
-    //   installment.add(e);
-    //
-    //   textEditionController.add([
-    //     TextEditingController(text: e['installment_no']),
-    //     TextEditingController(text: e['receipt_no']),
-    //     TextEditingController(text: e['installment_date']),
-    //     TextEditingController(text: e['amount']),
-    //     TextEditingController(text: e['paymenttype']),
-    //   ]);
-    // });
+    installmentDetails.clear();
 
     studentData['courseDetails'].forEach((e) {
       courseDetails.add(e);
@@ -204,9 +199,11 @@ class StudentController extends GetxController {
 
     studData.addAll(studentData);
 
-    print('>>>>>>>>>>>>>>>>>>>>>>>>>>$studData');
-
     update();
+
+    ///pending fees
+
+    pendingFee = (int.parse(studentData['pendingFees'])).toString();
 
     /// controller value
     nameController.text = '${studData['name'].toString().capitalizeFirst}';
@@ -219,15 +216,13 @@ class StudentController extends GetxController {
     courseDurationController.text = '${studData['courseDuration']}';
     feesController.text = '${studData['totalFees']}';
     educationController.text = '${studData['education']}';
+    installment = studData['installment_details'];
 
+    //  log('message---------$installment');
     update();
   }
 
-  /// fees controller
-
-  List textEditionController = [];
-  List data = [];
-
+  ///installment controller
   List<String> installmentHeading = [
     'Installment No',
     'Receipt No',
@@ -236,14 +231,47 @@ class StudentController extends GetxController {
     'PaymentMode'
   ];
 
-  addTextFields() {
-    textEditionController.add([
+  List<Map> installmentDetails = [];
+  Future installmentData() async {
+    installmentDetails.clear();
+    Document data1 = await studentCollection.document(studentId).get();
+    Map<String, dynamic>? installmentData = data1.map;
+
+    installmentData['installment_details'].forEach((element) {
+      installmentDetails.add(element);
+    });
+
+    controllers.clear();
+
+    print('object-------$installmentDetails');
+    if (installmentDetails != [] || installmentDetails.isNotEmpty) {
+      for (var i = 0; i < installmentDetails.length; i++) {
+        controllers.add([
+          TextEditingController(text: installmentDetails[i]['installment_no']),
+          TextEditingController(text: installmentDetails[i]['receipt_no']),
+          TextEditingController(
+              text: installmentDetails[i]['installment_date']),
+          TextEditingController(text: installmentDetails[i]['amount']),
+          TextEditingController(text: installmentDetails[i]['paymenttype']),
+        ]);
+      }
+    }
+    update();
+  }
+
+  void addTextEditingController() {
+    controllers.add([
       TextEditingController(),
       TextEditingController(),
       TextEditingController(),
       TextEditingController(),
       TextEditingController(),
     ]);
+    update();
+  }
+
+  void removeTextEditingController(int index) {
+    controllers.removeAt(index);
     update();
   }
 }
